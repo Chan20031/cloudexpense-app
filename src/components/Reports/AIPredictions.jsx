@@ -5,10 +5,51 @@ export default function AIPredictions() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [dataPoints, setDataPoints] = useState(0);
+  const [loadingStep, setLoadingStep] = useState(0);
+  const [loadingProgress, setLoadingProgress] = useState(0);
 
   const fetchPredictions = async () => {
     setLoading(true);
     setError(null);
+    setLoadingStep(0);
+    setLoadingProgress(0);
+    
+    // Simulate AI processing steps with realistic timing
+    const loadingSteps = [
+      'Initializing Prophet AI model...',
+      'Analyzing spending patterns...',
+      'Processing transaction data...',
+      'Generating predictions...',
+      'Finalizing results...'
+    ];
+    
+    // Start the loading animation
+    let currentStep = 0;
+    let progressInterval;
+    let stepInterval;
+    
+    const startLoadingAnimation = () => {
+      progressInterval = setInterval(() => {
+        setLoadingProgress(prev => {
+          if (prev >= 100) {
+            clearInterval(progressInterval);
+            return 100;
+          }
+          return prev + 1.5;
+        });
+      }, 40);
+      
+      stepInterval = setInterval(() => {
+        setLoadingStep(prev => {
+          if (prev < loadingSteps.length - 1) {
+            return prev + 1;
+          }
+          return prev;
+        });
+      }, 500);
+    };
+    
+    startLoadingAnimation();
     
     try {
       const token = localStorage.getItem('token');
@@ -20,13 +61,17 @@ export default function AIPredictions() {
         return;
       }
       
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/predict`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
+      // Add minimum delay to make AI processing feel more realistic
+      const [response] = await Promise.all([
+        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/predict`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }),
+        new Promise(resolve => setTimeout(resolve, 2500)) // Minimum 2.5 second delay
+      ]);
       
       console.log('Response status:', response.status);
       console.log('Response headers:', response.headers);
@@ -35,6 +80,10 @@ export default function AIPredictions() {
       console.log('Response data:', data);
       
       if (response.ok) {
+        // Complete the progress bar
+        setLoadingProgress(100);
+        await new Promise(resolve => setTimeout(resolve, 300)); // Small delay to show completion
+        
         setPredictions(data.predictions);
         setDataPoints(data.data_points_used);
       } else {
@@ -44,7 +93,11 @@ export default function AIPredictions() {
       console.error('Fetch error:', err);
       setError('Network error. Please try again.');
     } finally {
+      if (progressInterval) clearInterval(progressInterval);
+      if (stepInterval) clearInterval(stepInterval);
       setLoading(false);
+      setLoadingStep(0);
+      setLoadingProgress(0);
     }
   };
 
@@ -101,14 +154,14 @@ export default function AIPredictions() {
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
-              Analyzing...
+              Processing...
             </>
           ) : (
             <>
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
               </svg>
-              Refresh
+              Analyze
             </>
           )}
         </button>
@@ -176,12 +229,61 @@ export default function AIPredictions() {
         </>
       ) : loading ? (
         <div className="flex items-center justify-center py-12">
-          <div className="text-center">
-            <svg className="animate-spin h-8 w-8 text-blue-600 mx-auto mb-4" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            <p className="text-gray-600 dark:text-gray-300">AI is analyzing your spending patterns...</p>
+          <div className="text-center max-w-md mx-auto">
+            {/* AI Brain Animation */}
+            <div className="relative mb-6">
+              <div className="w-16 h-16 mx-auto mb-4 relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full animate-pulse"></div>
+                <div className="absolute inset-2 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center">
+                  <span className="text-2xl">🧠</span>
+                </div>
+                {/* Animated dots around the brain */}
+                <div className="absolute -inset-4">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full absolute top-0 left-1/2 transform -translate-x-1/2 animate-ping"></div>
+                  <div className="w-2 h-2 bg-purple-500 rounded-full absolute bottom-0 left-1/2 transform -translate-x-1/2 animate-ping" style={{animationDelay: '0.5s'}}></div>
+                  <div className="w-2 h-2 bg-indigo-500 rounded-full absolute top-1/2 left-0 transform -translate-y-1/2 animate-ping" style={{animationDelay: '1s'}}></div>
+                  <div className="w-2 h-2 bg-blue-400 rounded-full absolute top-1/2 right-0 transform -translate-y-1/2 animate-ping" style={{animationDelay: '1.5s'}}></div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Progress Bar */}
+            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-4">
+              <div 
+                className="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full transition-all duration-300 ease-out"
+                style={{ width: `${loadingProgress}%` }}
+              ></div>
+            </div>
+            
+            {/* Loading Steps */}
+            <div className="space-y-2">
+              <p className="text-lg font-medium text-gray-800 dark:text-white">
+                {[
+                  'Initializing Prophet AI model...',
+                  'Analyzing spending patterns...',
+                  'Processing transaction data...',
+                  'Generating predictions...',
+                  'Finalizing results...'
+                ][loadingStep]}
+              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                This may take a moment as our AI analyzes your data
+              </p>
+              
+              {/* Processing indicators */}
+              <div className="flex justify-center items-center gap-1 mt-3">
+                {[0, 1, 2, 3, 4].map((step) => (
+                  <div
+                    key={step}
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                      step <= loadingStep
+                        ? 'bg-blue-500'
+                        : 'bg-gray-300 dark:bg-gray-600'
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       ) : (
