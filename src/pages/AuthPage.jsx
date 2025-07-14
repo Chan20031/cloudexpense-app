@@ -36,7 +36,13 @@ export default function AuthPage() {
         });
         window.google.accounts.id.renderButton(
           document.getElementById('google-signin-button'),
-          { theme: 'outline', size: 'large', width: '100%' }
+          { 
+            theme: 'outline', 
+            size: 'large', 
+            width: 350,
+            text: 'continue_with',
+            shape: 'rectangular'
+          }
         );
       }
     };
@@ -296,7 +302,9 @@ export default function AuthPage() {
                       <span className="px-2 bg-white text-gray-500">Or continue with</span>
                     </div>
                   </div>
-                  <div id="google-signin-button" className="mt-4" />
+                  <div className="flex justify-center mt-4">
+                    <div id="google-signin-button" />
+                  </div>
                 </div>
               </>
             )}
