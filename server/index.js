@@ -75,6 +75,15 @@ const upload = multer({ storage });
 
 // Routes
 
+// Health check endpoint for App Runner
+app.get('/health', (req, res) => {
+  res.status(200).json({ 
+    status: 'healthy', 
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
+});
+
 // Register a new user
 app.post('/api/auth/register', async (req, res) => {
   try {
