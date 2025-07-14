@@ -11,6 +11,7 @@ export default function AIPredictions() {
   const fetchPredictions = async () => {
     setLoading(true);
     setError(null);
+    setPredictions(null); // Clear predictions to show full loading animation
     setLoadingStep(0);
     setLoadingProgress(0);
     
