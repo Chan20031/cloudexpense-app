@@ -64,7 +64,7 @@ router.post('/', async (req, res) => {
     const { spawn } = require('child_process');
     const path = require('path');
     
-    const pythonProcess = spawn('python', [path.join(__dirname, '../cloud_predictor.py')]);
+    const pythonProcess = spawn('python3', [path.join(__dirname, '../cloud_predictor.py')]);
     
     let output = '';
     let errorOutput = '';

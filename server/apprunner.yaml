@@ -4,6 +4,10 @@ build:
   commands:
     build:
       - npm ci --only=production
+      - yum update -y
+      - yum install -y python3 python3-pip
+      - python3 -m pip install --upgrade pip
+      - python3 -m pip install prophet pandas
 run:
   command: npm start
   network:
@@ -12,3 +16,31 @@ run:
   env:
     - name: NODE_ENV
       value: production
+    - name: PORT
+      value: "5000"
+    - name: TZ
+      value: Asia/Kuala_Lumpur
+    - name: DB_USER
+      value: postgres
+    - name: DB_PASSWORD
+      value: Zixue123!
+    - name: DB_HOST
+      value: cloudexpense-db.cu18s8qo82la.us-east-1.rds.amazonaws.com
+    - name: DB_PORT
+      value: "5432"
+    - name: DB_DATABASE
+      value: cloudexpense
+    - name: JWT_SECRET
+      value: 7f4df5bc9bedfa7acbf4d3ca212abd31e8b70c2d7c125641d0a8d2e8af4ff326
+    - name: EMAIL_SERVICE
+      value: gmail
+    - name: EMAIL_USER
+      value: zixue4399@gmail.com
+    - name: EMAIL_PASSWORD
+      value: yuco eqge wqak qydc
+    - name: FRONTEND_URL
+      value: https://main.d1woe51v3gv9g2.amplifyapp.com
+    - name: AWS_REGION
+      value: us-east-1
+    - name: AWS_S3_BUCKET
+      value: cloudexpense-receipts
