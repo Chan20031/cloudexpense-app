@@ -31,33 +31,18 @@ app.use(express.json());
 // JWT Secret
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
-// Email configuration - Use AWS SES for production, Gmail for local development
-const isProduction = process.env.NODE_ENV === 'production';
-
-const transporter = nodemailer.createTransport({
-  host: isProduction 
-    ? `email-smtp.${process.env.AWS_SES_REGION || 'us-east-1'}.amazonaws.com`
-    : 'smtp.gmail.com',
-  port: 587,
-  secure: false,
+// Email configuration - Use Gmail SMTP for both local and production
+const transporter = nodemailer.createTransporter({
+  service: 'gmail',
   auth: {
-    user: isProduction 
-      ? process.env.SES_SMTP_USERNAME 
-      : process.env.EMAIL_USER,
-    pass: isProduction 
-      ? process.env.SES_SMTP_PASSWORD 
-      : (process.env.EMAIL_PASSWORD || 'your-email-password').replace(/\s/g, '')
-  },
-  tls: {
-    rejectUnauthorized: false
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD
   }
 });
 
-// Email sender address - use verified SES email in production
+// Email sender address
 const getEmailSender = () => {
-  return isProduction 
-    ? process.env.EMAIL_USER || 'noreply@cloudexpense.com'  // Use your verified SES email
-    : process.env.EMAIL_USER || 'your-email@gmail.com';
+  return process.env.EMAIL_USER || 'your-email@gmail.com';
 };
 
 // Helper function to generate tokens
@@ -151,13 +136,21 @@ app.post('/api/auth/register', async (req, res) => {
       `
     };
     
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error('Error sending verification email:', error);
-      } else {
-        console.log('Verification email sent:', info.response);
-      }
-    });
+    // Send verification email with proper error handling
+    try {
+      console.log('Attempting to send verification email...');
+      const info = await transporter.sendMail(mailOptions);
+      console.log('✅ Verification email sent successfully:', info.response);
+      console.log('Message ID:', info.messageId);
+    } catch (emailError) {
+      console.error('❌ Error sending verification email:', emailError);
+      console.error('Email config:', {
+        service: 'gmail',
+        user: process.env.EMAIL_USER,
+        sender: getEmailSender()
+      });
+      // Continue with registration even if email fails
+    }
     
     res.status(201).json({ 
       message: 'User registered successfully. Please check your email to verify your account.',
@@ -429,13 +422,21 @@ app.post('/api/auth/forgot-password', async (req, res) => {
       `
     };
     
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error('Error sending reset email:', error);
-      } else {
-        console.log('Reset email sent successfully:', info.response);
-      }
-    });
+    // Send reset email with proper error handling
+    try {
+      console.log('Attempting to send password reset email...');
+      const info = await transporter.sendMail(mailOptions);
+      console.log('✅ Password reset email sent successfully:', info.response);
+      console.log('Message ID:', info.messageId);
+    } catch (emailError) {
+      console.error('❌ Error sending password reset email:', emailError);
+      console.error('Email config:', {
+        service: 'gmail',
+        user: process.env.EMAIL_USER,
+        sender: getEmailSender()
+      });
+      // Continue even if email fails
+    }
     
     res.status(200).json({ message: 'If your email is registered, you will receive a password reset link' });
     
@@ -680,15 +681,14 @@ app.get('/api/debug/token-status/:token', async (req, res) => {
 // Debug endpoint for testing email in production
 app.post('/api/debug/test-email', async (req, res) => {
   try {
-    console.log('=== PRODUCTION EMAIL DEBUG ===');
+    console.log('=== GMAIL SMTP EMAIL DEBUG ===');
     console.log('EMAIL_USER:', process.env.EMAIL_USER);
-    console.log('EMAIL_SERVICE:', process.env.EMAIL_SERVICE);
     console.log('EMAIL_PASSWORD length:', process.env.EMAIL_PASSWORD ? process.env.EMAIL_PASSWORD.length : 'undefined');
     console.log('FRONTEND_URL:', process.env.FRONTEND_URL);
     
     // Test transporter verification
     await transporter.verify();
-    console.log('✅ Transporter verified in production');
+    console.log('✅ Gmail SMTP transporter verified');
     
     // Send test email
     const info = await transporter.sendMail({
@@ -697,9 +697,9 @@ app.post('/api/debug/test-email', async (req, res) => {
       subject: 'CloudExpense Production Email Test',
       html: `
         <h1>Production Email Test</h1>
-        <p>This email was sent from the production App Runner environment using ${isProduction ? 'AWS SES' : 'Gmail SMTP'}.</p>
+        <p>This email was sent from the production App Runner environment using Gmail SMTP.</p>
         <p>Sent at: ${new Date().toISOString()}</p>
-        <p>Environment: ${isProduction ? 'App Runner Production (SES)' : 'Local Development (Gmail)'}</p>
+        <p>Environment: Production App Runner (Gmail SMTP)</p>
         <p>From: ${getEmailSender()}</p>
       `
     });
@@ -733,47 +733,46 @@ app.post('/api/debug/test-email', async (req, res) => {
 // Debug GET endpoint for easier email testing
 app.get('/api/debug/test-email-get', async (req, res) => {
   try {
-    console.log('=== PRODUCTION EMAIL DEBUG (GET) ===');
+    console.log('=== GMAIL SMTP EMAIL DEBUG (GET) ===');
     console.log('EMAIL_USER:', process.env.EMAIL_USER);
-    console.log('SES_SMTP_USERNAME:', process.env.SES_SMTP_USERNAME);
-    console.log('AWS_SES_REGION:', process.env.AWS_SES_REGION);
+    console.log('EMAIL_PASSWORD length:', process.env.EMAIL_PASSWORD ? process.env.EMAIL_PASSWORD.length : 'undefined');
     console.log('NODE_ENV:', process.env.NODE_ENV);
     console.log('FRONTEND_URL:', process.env.FRONTEND_URL);
     
     // Test transporter verification
     await transporter.verify();
-    console.log('✅ Transporter verified in production');
+    console.log('✅ Gmail SMTP transporter verified');
     
     // Send test email
     const info = await transporter.sendMail({
       from: getEmailSender(),
       to: process.env.EMAIL_USER,
-      subject: 'CloudExpense Production Email Test (GET)',
+      subject: 'CloudExpense Gmail SMTP Test (GET)',
       html: `
-        <h1>Production Email Test</h1>
-        <p>This email was sent from the production App Runner environment using ${isProduction ? 'AWS SES' : 'Gmail SMTP'}.</p>
+        <h1>Gmail SMTP Test</h1>
+        <p>This email was sent from App Runner using Gmail SMTP.</p>
         <p>Sent at: ${new Date().toISOString()}</p>
-        <p>Environment: ${isProduction ? 'App Runner Production (SES)' : 'Local Development (Gmail)'}</p>
+        <p>Environment: Production App Runner (Gmail SMTP)</p>
         <p>From: ${getEmailSender()}</p>
         <p>Test triggered via GET request</p>
       `
     });
     
-    console.log('✅ Production email sent successfully!');
+    console.log('✅ Gmail SMTP email sent successfully!');
     console.log('Message ID:', info.messageId);
     console.log('Response:', info.response);
     
     res.json({
       success: true,
-      message: 'Email sent successfully from production',
+      message: 'Gmail SMTP email sent successfully',
       messageId: info.messageId,
       response: info.response,
-      environment: isProduction ? 'production (SES)' : 'development (Gmail)',
+      environment: 'production (Gmail SMTP)',
       emailSender: getEmailSender()
     });
     
   } catch (error) {
-    console.error('❌ Production email failed:');
+    console.error('❌ Gmail SMTP email failed:');
     console.error('Error code:', error.code);
     console.error('Error message:', error.message);
     console.error('Full error:', error);
@@ -783,7 +782,7 @@ app.get('/api/debug/test-email-get', async (req, res) => {
       error: error.message,
       code: error.code,
       details: error.response || 'No additional details',
-      environment: isProduction ? 'production (SES)' : 'development (Gmail)',
+      environment: 'production (Gmail SMTP)',
       emailSender: getEmailSender()
     });
   }

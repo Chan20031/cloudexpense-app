@@ -34,12 +34,8 @@ run:
       value: 7f4df5bc9bedfa7acbf4d3ca212abd31e8b70c2d7c125641d0a8d2e8af4ff326
     - name: EMAIL_USER
       value: zixue4399@gmail.com
-    - name: SES_SMTP_USERNAME
-      value: AKIA4WDPZFIPESO5KWFC
-    - name: SES_SMTP_PASSWORD
-      value: BIAqhlVQWSXVA248OTei8mIp2y1HrpO1YXC1s/o9J0qR
-    - name: AWS_SES_REGION
-      value: us-east-1
+    - name: EMAIL_PASSWORD
+      value: yuco eqge wqak qydc
     - name: FRONTEND_URL
       value: https://main.d1woe51v3gv9g2.amplifyapp.com
     - name: AWS_REGION
