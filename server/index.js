@@ -6,7 +6,7 @@ const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const nodemailer = require('nodemailer');
+const sgMail = require('@sendgrid/mail');
 const crypto = require('crypto');
 const db = require('./db');
 const transactionRoutes = require('./routes/transactions');
@@ -31,18 +31,28 @@ app.use(express.json());
 // JWT Secret
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
-// Email configuration - Use Gmail SMTP for both local and production
-const transporter = nodemailer.createTransporter({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD
-  }
-});
+// SendGrid configuration
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-// Email sender address
+// Email sender details
 const getEmailSender = () => {
-  return process.env.EMAIL_USER || 'your-email@gmail.com';
+  return {
+    email: process.env.FROM_EMAIL || 'noreply@cloudexpense.com',
+    name: process.env.FROM_NAME || 'CloudExpense'
+  };
+};
+
+// Helper function to send emails using SendGrid
+const sendEmail = async (to, subject, html) => {
+  const sender = getEmailSender();
+  const msg = {
+    to: to,
+    from: sender,
+    subject: subject,
+    html: html,
+  };
+  
+  return await sgMail.send(msg);
 };
 
 // Helper function to generate tokens
@@ -120,35 +130,26 @@ app.post('/api/auth/register', async (req, res) => {
     // Send verification email
     const verificationUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/verify-email?token=${verificationToken}`;
     
-    const mailOptions = {
-      from: getEmailSender(),
-      to: email,
-      subject: 'Verify Your Email - CloudExpense',
-      html: `
-        <h1>Welcome to CloudExpense!</h1>
-        <p>Hello ${name},</p>
-        <p>Thank you for signing up. Please verify your email by clicking the link below:</p>
-        <a href="${verificationUrl}" style="display: inline-block; padding: 10px 20px; background-color: #14b8a6; color: white; text-decoration: none; border-radius: 5px;">Verify Email</a>
-        <p>If the button doesn't work, copy and paste this link into your browser:</p>
-        <p><a href="${verificationUrl}">${verificationUrl}</a></p>
-        <p>This verification link will remain valid until you verify your account.</p>
-        <p>Best regards,<br>CloudExpense Team</p>
-      `
-    };
+    const emailHtml = `
+      <h1>Welcome to CloudExpense!</h1>
+      <p>Hello ${name},</p>
+      <p>Thank you for signing up. Please verify your email by clicking the link below:</p>
+      <a href="${verificationUrl}" style="display: inline-block; padding: 10px 20px; background-color: #14b8a6; color: white; text-decoration: none; border-radius: 5px;">Verify Email</a>
+      <p>If the button doesn't work, copy and paste this link into your browser:</p>
+      <p><a href="${verificationUrl}">${verificationUrl}</a></p>
+      <p>This verification link will remain valid until you verify your account.</p>
+      <p>Best regards,<br>CloudExpense Team</p>
+    `;
     
-    // Send verification email with proper error handling
+    // Send verification email with SendGrid
     try {
-      console.log('Attempting to send verification email...');
-      const info = await transporter.sendMail(mailOptions);
-      console.log('✅ Verification email sent successfully:', info.response);
-      console.log('Message ID:', info.messageId);
+      console.log('Attempting to send verification email via SendGrid...');
+      const emailResult = await sendEmail(email, 'Verify Your Email - CloudExpense', emailHtml);
+      console.log('✅ Verification email sent successfully via SendGrid');
+      console.log('Message ID:', emailResult[0].headers['x-message-id']);
     } catch (emailError) {
-      console.error('❌ Error sending verification email:', emailError);
-      console.error('Email config:', {
-        service: 'gmail',
-        user: process.env.EMAIL_USER,
-        sender: getEmailSender()
-      });
+      console.error('❌ Error sending verification email via SendGrid:', emailError);
+      console.error('SendGrid error details:', emailError.response?.body);
       // Continue with registration even if email fails
     }
     
@@ -407,34 +408,25 @@ app.post('/api/auth/forgot-password', async (req, res) => {
     // Send reset email
     const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/reset-password?token=${resetToken}`;
     
-    const mailOptions = {
-      from: getEmailSender(),
-      to: email,
-      subject: 'Password Reset - CloudExpense',
-      html: `
-        <h1>Password Reset Request</h1>
-        <p>Hello ${user.rows[0].name},</p>
-        <p>You requested a password reset. Please click the link below to reset your password:</p>
-        <a href="${resetUrl}" style="display: inline-block; padding: 10px 20px; background-color: #14b8a6; color: white; text-decoration: none; border-radius: 5px;">Reset Password</a>
-        <p>This link will expire in 1 hour.</p>
-        <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>
-        <p>Best regards,<br>CloudExpense Team</p>
-      `
-    };
+    const emailHtml = `
+      <h1>Password Reset Request</h1>
+      <p>Hello ${user.rows[0].name},</p>
+      <p>You requested a password reset. Please click the link below to reset your password:</p>
+      <a href="${resetUrl}" style="display: inline-block; padding: 10px 20px; background-color: #14b8a6; color: white; text-decoration: none; border-radius: 5px;">Reset Password</a>
+      <p>This link will expire in 1 hour.</p>
+      <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>
+      <p>Best regards,<br>CloudExpense Team</p>
+    `;
     
-    // Send reset email with proper error handling
+    // Send reset email with SendGrid
     try {
-      console.log('Attempting to send password reset email...');
-      const info = await transporter.sendMail(mailOptions);
-      console.log('✅ Password reset email sent successfully:', info.response);
-      console.log('Message ID:', info.messageId);
+      console.log('Attempting to send password reset email via SendGrid...');
+      const emailResult = await sendEmail(email, 'Password Reset - CloudExpense', emailHtml);
+      console.log('✅ Password reset email sent successfully via SendGrid');
+      console.log('Message ID:', emailResult[0].headers['x-message-id']);
     } catch (emailError) {
-      console.error('❌ Error sending password reset email:', emailError);
-      console.error('Email config:', {
-        service: 'gmail',
-        user: process.env.EMAIL_USER,
-        sender: getEmailSender()
-      });
+      console.error('❌ Error sending password reset email via SendGrid:', emailError);
+      console.error('SendGrid error details:', emailError.response?.body);
       // Continue even if email fails
     }
     
@@ -678,54 +670,48 @@ app.get('/api/debug/token-status/:token', async (req, res) => {
   }
 });
 
-// Debug endpoint for testing email in production
+// Debug endpoint for testing email
 app.post('/api/debug/test-email', async (req, res) => {
   try {
-    console.log('=== GMAIL SMTP EMAIL DEBUG ===');
-    console.log('EMAIL_USER:', process.env.EMAIL_USER);
-    console.log('EMAIL_PASSWORD length:', process.env.EMAIL_PASSWORD ? process.env.EMAIL_PASSWORD.length : 'undefined');
+    console.log('=== SENDGRID EMAIL DEBUG ===');
+    console.log('SENDGRID_API_KEY length:', process.env.SENDGRID_API_KEY ? process.env.SENDGRID_API_KEY.length : 'undefined');
+    console.log('FROM_EMAIL:', process.env.FROM_EMAIL);
+    console.log('FROM_NAME:', process.env.FROM_NAME);
     console.log('FRONTEND_URL:', process.env.FRONTEND_URL);
     
-    // Test transporter verification
-    await transporter.verify();
-    console.log('✅ Gmail SMTP transporter verified');
+    const sender = getEmailSender();
+    console.log('Email sender config:', sender);
     
     // Send test email
-    const info = await transporter.sendMail({
-      from: getEmailSender(),
-      to: process.env.EMAIL_USER,
-      subject: 'CloudExpense Production Email Test',
-      html: `
-        <h1>Production Email Test</h1>
-        <p>This email was sent from the production App Runner environment using Gmail SMTP.</p>
-        <p>Sent at: ${new Date().toISOString()}</p>
-        <p>Environment: Production App Runner (Gmail SMTP)</p>
-        <p>From: ${getEmailSender()}</p>
-      `
-    });
+    const emailHtml = `
+      <h1>SendGrid Test</h1>
+      <p>This email was sent from CloudExpense using SendGrid.</p>
+      <p>Sent at: ${new Date().toISOString()}</p>
+      <p>Environment: ${process.env.NODE_ENV || 'development'}</p>
+      <p>From: ${sender.name} &lt;${sender.email}&gt;</p>
+    `;
     
-    console.log('✅ Production email sent successfully!');
-    console.log('Message ID:', info.messageId);
-    console.log('Response:', info.response);
+    const emailResult = await sendEmail(sender.email, 'CloudExpense SendGrid Test', emailHtml);
+    
+    console.log('✅ SendGrid email sent successfully!');
+    console.log('Message ID:', emailResult[0].headers['x-message-id']);
     
     res.json({
       success: true,
-      message: 'Email sent successfully from production',
-      messageId: info.messageId,
-      response: info.response
+      message: 'Email sent successfully via SendGrid',
+      messageId: emailResult[0].headers['x-message-id'],
+      sender: sender
     });
     
   } catch (error) {
-    console.error('❌ Production email failed:');
-    console.error('Error code:', error.code);
+    console.error('❌ SendGrid email failed:');
     console.error('Error message:', error.message);
-    console.error('Full error:', error);
+    console.error('SendGrid error details:', error.response?.body);
     
     res.status(500).json({
       success: false,
       error: error.message,
-      code: error.code,
-      details: error.response || 'No additional details'
+      details: error.response?.body || 'No additional details'
     });
   }
 });
@@ -733,57 +719,49 @@ app.post('/api/debug/test-email', async (req, res) => {
 // Debug GET endpoint for easier email testing
 app.get('/api/debug/test-email-get', async (req, res) => {
   try {
-    console.log('=== GMAIL SMTP EMAIL DEBUG (GET) ===');
-    console.log('EMAIL_USER:', process.env.EMAIL_USER);
-    console.log('EMAIL_PASSWORD length:', process.env.EMAIL_PASSWORD ? process.env.EMAIL_PASSWORD.length : 'undefined');
+    console.log('=== SENDGRID EMAIL DEBUG (GET) ===');
+    console.log('SENDGRID_API_KEY length:', process.env.SENDGRID_API_KEY ? process.env.SENDGRID_API_KEY.length : 'undefined');
+    console.log('FROM_EMAIL:', process.env.FROM_EMAIL);
+    console.log('FROM_NAME:', process.env.FROM_NAME);
     console.log('NODE_ENV:', process.env.NODE_ENV);
     console.log('FRONTEND_URL:', process.env.FRONTEND_URL);
     
-    // Test transporter verification
-    await transporter.verify();
-    console.log('✅ Gmail SMTP transporter verified');
+    const sender = getEmailSender();
     
     // Send test email
-    const info = await transporter.sendMail({
-      from: getEmailSender(),
-      to: process.env.EMAIL_USER,
-      subject: 'CloudExpense Gmail SMTP Test (GET)',
-      html: `
-        <h1>Gmail SMTP Test</h1>
-        <p>This email was sent from App Runner using Gmail SMTP.</p>
-        <p>Sent at: ${new Date().toISOString()}</p>
-        <p>Environment: Production App Runner (Gmail SMTP)</p>
-        <p>From: ${getEmailSender()}</p>
-        <p>Test triggered via GET request</p>
-      `
-    });
+    const emailHtml = `
+      <h1>SendGrid Test (GET)</h1>
+      <p>This email was sent from CloudExpense using SendGrid.</p>
+      <p>Sent at: ${new Date().toISOString()}</p>
+      <p>Environment: ${process.env.NODE_ENV || 'development'}</p>
+      <p>From: ${sender.name} &lt;${sender.email}&gt;</p>
+      <p>Test triggered via GET request</p>
+    `;
     
-    console.log('✅ Gmail SMTP email sent successfully!');
-    console.log('Message ID:', info.messageId);
-    console.log('Response:', info.response);
+    const emailResult = await sendEmail(sender.email, 'CloudExpense SendGrid Test (GET)', emailHtml);
+    
+    console.log('✅ SendGrid email sent successfully!');
+    console.log('Message ID:', emailResult[0].headers['x-message-id']);
     
     res.json({
       success: true,
-      message: 'Gmail SMTP email sent successfully',
-      messageId: info.messageId,
-      response: info.response,
-      environment: 'production (Gmail SMTP)',
-      emailSender: getEmailSender()
+      message: 'SendGrid email sent successfully',
+      messageId: emailResult[0].headers['x-message-id'],
+      environment: `${process.env.NODE_ENV || 'development'} (SendGrid)`,
+      sender: sender
     });
     
   } catch (error) {
-    console.error('❌ Gmail SMTP email failed:');
-    console.error('Error code:', error.code);
+    console.error('❌ SendGrid email failed:');
     console.error('Error message:', error.message);
-    console.error('Full error:', error);
+    console.error('SendGrid error details:', error.response?.body);
     
     res.status(500).json({
       success: false,
       error: error.message,
-      code: error.code,
-      details: error.response || 'No additional details',
-      environment: 'production (Gmail SMTP)',
-      emailSender: getEmailSender()
+      details: error.response?.body || 'No additional details',
+      environment: `${process.env.NODE_ENV || 'development'} (SendGrid)`,
+      sender: getEmailSender()
     });
   }
 });
