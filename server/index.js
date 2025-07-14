@@ -730,6 +730,65 @@ app.post('/api/debug/test-email', async (req, res) => {
   }
 });
 
+// Debug GET endpoint for easier email testing
+app.get('/api/debug/test-email-get', async (req, res) => {
+  try {
+    console.log('=== PRODUCTION EMAIL DEBUG (GET) ===');
+    console.log('EMAIL_USER:', process.env.EMAIL_USER);
+    console.log('SES_SMTP_USERNAME:', process.env.SES_SMTP_USERNAME);
+    console.log('AWS_SES_REGION:', process.env.AWS_SES_REGION);
+    console.log('NODE_ENV:', process.env.NODE_ENV);
+    console.log('FRONTEND_URL:', process.env.FRONTEND_URL);
+    
+    // Test transporter verification
+    await transporter.verify();
+    console.log('✅ Transporter verified in production');
+    
+    // Send test email
+    const info = await transporter.sendMail({
+      from: getEmailSender(),
+      to: process.env.EMAIL_USER,
+      subject: 'CloudExpense Production Email Test (GET)',
+      html: `
+        <h1>Production Email Test</h1>
+        <p>This email was sent from the production App Runner environment using ${isProduction ? 'AWS SES' : 'Gmail SMTP'}.</p>
+        <p>Sent at: ${new Date().toISOString()}</p>
+        <p>Environment: ${isProduction ? 'App Runner Production (SES)' : 'Local Development (Gmail)'}</p>
+        <p>From: ${getEmailSender()}</p>
+        <p>Test triggered via GET request</p>
+      `
+    });
+    
+    console.log('✅ Production email sent successfully!');
+    console.log('Message ID:', info.messageId);
+    console.log('Response:', info.response);
+    
+    res.json({
+      success: true,
+      message: 'Email sent successfully from production',
+      messageId: info.messageId,
+      response: info.response,
+      environment: isProduction ? 'production (SES)' : 'development (Gmail)',
+      emailSender: getEmailSender()
+    });
+    
+  } catch (error) {
+    console.error('❌ Production email failed:');
+    console.error('Error code:', error.code);
+    console.error('Error message:', error.message);
+    console.error('Full error:', error);
+    
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      code: error.code,
+      details: error.response || 'No additional details',
+      environment: isProduction ? 'production (SES)' : 'development (Gmail)',
+      emailSender: getEmailSender()
+    });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
