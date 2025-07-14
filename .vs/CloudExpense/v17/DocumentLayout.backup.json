@@ -1,0 +1,258 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\components\\Dashboard\\SpendingCategories.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\components\\Dashboard\\SpendingCategories.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\components\\Dashboard\\RecentTransactions.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\components\\Dashboard\\RecentTransactions.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\components\\Dashboard\\ExpenseChart.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\components\\Dashboard\\ExpenseChart.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\components\\Dashboard\\BudgetOverview.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\components\\Dashboard\\BudgetOverview.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\components\\Budget\\BudgetTracker.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\components\\Budget\\BudgetTracker.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\components\\Budget\\BudgetSetup.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\components\\Budget\\BudgetSetup.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\components\\Auth\\Signup.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\components\\Auth\\Signup.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\components\\Auth\\Login.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\components\\Auth\\Login.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\pages\\SettingsPage.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\SettingsPage.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\pages\\ExpensesPage.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\ExpensesPage.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\pages\\ReportsPage.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\ReportsPage.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\pages\\BudgetPage.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\BudgetPage.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\pages\\DashboardPage.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\DashboardPage.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\pages\\AuthPage.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\AuthPage.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{74946827-37a0-11d2-a273-00c04f8ef4ff}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "SpendingCategories.jsx",
+              "DocumentMoniker": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\components\\Dashboard\\SpendingCategories.jsx",
+              "RelativeDocumentMoniker": "src\\components\\Dashboard\\SpendingCategories.jsx",
+              "ToolTip": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\components\\Dashboard\\SpendingCategories.jsx",
+              "RelativeToolTip": "src\\components\\Dashboard\\SpendingCategories.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-05-02T02:48:43.933Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "RecentTransactions.jsx",
+              "DocumentMoniker": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\components\\Dashboard\\RecentTransactions.jsx",
+              "RelativeDocumentMoniker": "src\\components\\Dashboard\\RecentTransactions.jsx",
+              "ToolTip": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\components\\Dashboard\\RecentTransactions.jsx",
+              "RelativeToolTip": "src\\components\\Dashboard\\RecentTransactions.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-05-02T02:48:41.833Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ExpenseChart.jsx",
+              "DocumentMoniker": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\components\\Dashboard\\ExpenseChart.jsx",
+              "RelativeDocumentMoniker": "src\\components\\Dashboard\\ExpenseChart.jsx",
+              "ToolTip": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\components\\Dashboard\\ExpenseChart.jsx",
+              "RelativeToolTip": "src\\components\\Dashboard\\ExpenseChart.jsx",
+              "ViewState": "AgIAACEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-05-02T02:48:39.913Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "BudgetOverview.jsx",
+              "DocumentMoniker": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\components\\Dashboard\\BudgetOverview.jsx",
+              "RelativeDocumentMoniker": "src\\components\\Dashboard\\BudgetOverview.jsx",
+              "ToolTip": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\components\\Dashboard\\BudgetOverview.jsx",
+              "RelativeToolTip": "src\\components\\Dashboard\\BudgetOverview.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-05-02T02:48:38.184Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "BudgetTracker.jsx",
+              "DocumentMoniker": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\components\\Budget\\BudgetTracker.jsx",
+              "RelativeDocumentMoniker": "src\\components\\Budget\\BudgetTracker.jsx",
+              "ToolTip": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\components\\Budget\\BudgetTracker.jsx",
+              "RelativeToolTip": "src\\components\\Budget\\BudgetTracker.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-05-02T02:48:35.892Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "BudgetSetup.jsx",
+              "DocumentMoniker": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\components\\Budget\\BudgetSetup.jsx",
+              "RelativeDocumentMoniker": "src\\components\\Budget\\BudgetSetup.jsx",
+              "ToolTip": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\components\\Budget\\BudgetSetup.jsx",
+              "RelativeToolTip": "src\\components\\Budget\\BudgetSetup.jsx",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-05-02T02:48:33.516Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Signup.jsx",
+              "DocumentMoniker": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\components\\Auth\\Signup.jsx",
+              "RelativeDocumentMoniker": "src\\components\\Auth\\Signup.jsx",
+              "ToolTip": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\components\\Auth\\Signup.jsx",
+              "RelativeToolTip": "src\\components\\Auth\\Signup.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-05-02T02:48:31.704Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Login.jsx",
+              "DocumentMoniker": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\components\\Auth\\Login.jsx",
+              "RelativeDocumentMoniker": "src\\components\\Auth\\Login.jsx",
+              "ToolTip": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\components\\Auth\\Login.jsx",
+              "RelativeToolTip": "src\\components\\Auth\\Login.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-05-02T02:48:30.748Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ExpensesPage.jsx",
+              "DocumentMoniker": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\pages\\ExpensesPage.jsx",
+              "RelativeDocumentMoniker": "src\\pages\\ExpensesPage.jsx",
+              "ToolTip": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\pages\\ExpensesPage.jsx",
+              "RelativeToolTip": "src\\pages\\ExpensesPage.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-05-01T15:09:23.614Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "SettingsPage.jsx",
+              "DocumentMoniker": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\pages\\SettingsPage.jsx",
+              "RelativeDocumentMoniker": "src\\pages\\SettingsPage.jsx",
+              "ToolTip": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\pages\\SettingsPage.jsx",
+              "RelativeToolTip": "src\\pages\\SettingsPage.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-05-01T15:09:21.247Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ReportsPage.jsx",
+              "DocumentMoniker": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\pages\\ReportsPage.jsx",
+              "RelativeDocumentMoniker": "src\\pages\\ReportsPage.jsx",
+              "ToolTip": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\pages\\ReportsPage.jsx",
+              "RelativeToolTip": "src\\pages\\ReportsPage.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-05-01T15:09:20.507Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "BudgetPage.jsx",
+              "DocumentMoniker": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\pages\\BudgetPage.jsx",
+              "RelativeDocumentMoniker": "src\\pages\\BudgetPage.jsx",
+              "ToolTip": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\pages\\BudgetPage.jsx",
+              "RelativeToolTip": "src\\pages\\BudgetPage.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-05-01T15:09:18.924Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "DashboardPage.jsx",
+              "DocumentMoniker": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\pages\\DashboardPage.jsx",
+              "RelativeDocumentMoniker": "src\\pages\\DashboardPage.jsx",
+              "ToolTip": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\pages\\DashboardPage.jsx",
+              "RelativeToolTip": "src\\pages\\DashboardPage.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-05-01T15:09:17.505Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "AuthPage.jsx",
+              "DocumentMoniker": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\pages\\AuthPage.jsx",
+              "RelativeDocumentMoniker": "src\\pages\\AuthPage.jsx",
+              "ToolTip": "C:\\Users\\User\\OneDrive\\Desktop\\CloudExpense\\src\\pages\\AuthPage.jsx",
+              "RelativeToolTip": "src\\pages\\AuthPage.jsx",
+              "ViewState": "AgIAADkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-05-01T15:09:14.028Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

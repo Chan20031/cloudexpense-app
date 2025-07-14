@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\components",
+    "\\src\\components\\Auth",
+    "\\src\\components\\Budget",
+    "\\src\\components\\Dashboard",
+    "\\src\\context",
+    "\\src\\hooks",
+    "\\src\\services",
+    "\\src\\utils"
+  ],
+  "SelectedNode": "\\src\\components\\Dashboard\\SpendingCategories.jsx",
+  "PreviewInSolutionExplorer": false
+}

@@ -1,0 +1,2107 @@
+[
+  {
+    "date": "2025-01-01",
+    "category": "Transport",
+    "amount": 15.19
+  },
+  {
+    "date": "2025-01-01",
+    "category": "Transport",
+    "amount": 21.97
+  },
+  {
+    "date": "2025-01-01",
+    "category": "Shopping",
+    "amount": 70.49
+  },
+  {
+    "date": "2025-01-02",
+    "category": "Transport",
+    "amount": 19.21
+  },
+  {
+    "date": "2025-01-02",
+    "category": "Transport",
+    "amount": 25.8
+  },
+  {
+    "date": "2025-01-02",
+    "category": "Education",
+    "amount": 157.13
+  },
+  {
+    "date": "2025-01-03",
+    "category": "Food",
+    "amount": 32.78
+  },
+  {
+    "date": "2025-01-03",
+    "category": "Food",
+    "amount": 32.38
+  },
+  {
+    "date": "2025-01-03",
+    "category": "Entertainment",
+    "amount": 61.21
+  },
+  {
+    "date": "2025-01-04",
+    "category": "Transport",
+    "amount": 9.47
+  },
+  {
+    "date": "2025-01-04",
+    "category": "Shopping",
+    "amount": 37.09
+  },
+  {
+    "date": "2025-01-04",
+    "category": "Bills",
+    "amount": 251.25
+  },
+  {
+    "date": "2025-01-04",
+    "category": "Bills",
+    "amount": 172.3
+  },
+  {
+    "date": "2025-01-05",
+    "category": "Food",
+    "amount": 30.97
+  },
+  {
+    "date": "2025-01-06",
+    "category": "Transport",
+    "amount": 20.27
+  },
+  {
+    "date": "2025-01-07",
+    "category": "Others",
+    "amount": 72.59
+  },
+  {
+    "date": "2025-01-08",
+    "category": "Transport",
+    "amount": 5.57
+  },
+  {
+    "date": "2025-01-08",
+    "category": "Education",
+    "amount": 121.2
+  },
+  {
+    "date": "2025-01-09",
+    "category": "Transport",
+    "amount": 21.13
+  },
+  {
+    "date": "2025-01-10",
+    "category": "Food",
+    "amount": 19.39
+  },
+  {
+    "date": "2025-01-10",
+    "category": "Entertainment",
+    "amount": 54.62
+  },
+  {
+    "date": "2025-01-12",
+    "category": "Food",
+    "amount": 13.32
+  },
+  {
+    "date": "2025-01-12",
+    "category": "Transport",
+    "amount": 1.8
+  },
+  {
+    "date": "2025-01-13",
+    "category": "Food",
+    "amount": 16.7
+  },
+  {
+    "date": "2025-01-13",
+    "category": "Food",
+    "amount": 35.5
+  },
+  {
+    "date": "2025-01-13",
+    "category": "Food",
+    "amount": 26.36
+  },
+  {
+    "date": "2025-01-14",
+    "category": "Food",
+    "amount": 32.35
+  },
+  {
+    "date": "2025-01-15",
+    "category": "Transport",
+    "amount": 17.2
+  },
+  {
+    "date": "2025-01-15",
+    "category": "Transport",
+    "amount": 23.28
+  },
+  {
+    "date": "2025-01-15",
+    "category": "Bills",
+    "amount": 317.15
+  },
+  {
+    "date": "2025-01-16",
+    "category": "Food",
+    "amount": 37.82
+  },
+  {
+    "date": "2025-01-16",
+    "category": "Transport",
+    "amount": 10.99
+  },
+  {
+    "date": "2025-01-16",
+    "category": "Shopping",
+    "amount": 86.9
+  },
+  {
+    "date": "2025-01-17",
+    "category": "Food",
+    "amount": 30.86
+  },
+  {
+    "date": "2025-01-17",
+    "category": "Entertainment",
+    "amount": 35.71
+  },
+  {
+    "date": "2025-01-17",
+    "category": "Others",
+    "amount": 12.96
+  },
+  {
+    "date": "2025-01-18",
+    "category": "Transport",
+    "amount": 8.28
+  },
+  {
+    "date": "2025-01-18",
+    "category": "Health",
+    "amount": 21.82
+  },
+  {
+    "date": "2025-01-18",
+    "category": "Education",
+    "amount": 60.19
+  },
+  {
+    "date": "2025-01-19",
+    "category": "Food",
+    "amount": 9.36
+  },
+  {
+    "date": "2025-01-19",
+    "category": "Food",
+    "amount": 22.78
+  },
+  {
+    "date": "2025-01-20",
+    "category": "Food",
+    "amount": 28.39
+  },
+  {
+    "date": "2025-01-21",
+    "category": "Transport",
+    "amount": 9.26
+  },
+  {
+    "date": "2025-01-23",
+    "category": "Food",
+    "amount": 19.9
+  },
+  {
+    "date": "2025-01-23",
+    "category": "Shopping",
+    "amount": 81.0
+  },
+  {
+    "date": "2025-01-23",
+    "category": "Bills",
+    "amount": 71.72
+  },
+  {
+    "date": "2025-01-24",
+    "category": "Food",
+    "amount": 36.13
+  },
+  {
+    "date": "2025-01-24",
+    "category": "Food",
+    "amount": 58.13
+  },
+  {
+    "date": "2025-01-24",
+    "category": "Transport",
+    "amount": 11.57
+  },
+  {
+    "date": "2025-01-24",
+    "category": "Entertainment",
+    "amount": 29.68
+  },
+  {
+    "date": "2025-01-25",
+    "category": "Food",
+    "amount": 16.07
+  },
+  {
+    "date": "2025-01-25",
+    "category": "Shopping",
+    "amount": 76.5
+  },
+  {
+    "date": "2025-01-26",
+    "category": "Transport",
+    "amount": 5.68
+  },
+  {
+    "date": "2025-01-26",
+    "category": "Transport",
+    "amount": 6.0
+  },
+  {
+    "date": "2025-01-26",
+    "category": "Transport",
+    "amount": 4.12
+  },
+  {
+    "date": "2025-01-26",
+    "category": "Others",
+    "amount": 43.82
+  },
+  {
+    "date": "2025-01-27",
+    "category": "Food",
+    "amount": 14.11
+  },
+  {
+    "date": "2025-01-27",
+    "category": "Transport",
+    "amount": 23.54
+  },
+  {
+    "date": "2025-01-27",
+    "category": "Transport",
+    "amount": 7.46
+  },
+  {
+    "date": "2025-01-27",
+    "category": "Bills",
+    "amount": 207.46
+  },
+  {
+    "date": "2025-01-27",
+    "category": "Education",
+    "amount": 95.86
+  },
+  {
+    "date": "2025-01-27",
+    "category": "Entertainment",
+    "amount": 50.69
+  },
+  {
+    "date": "2025-01-28",
+    "category": "Food",
+    "amount": 9.29
+  },
+  {
+    "date": "2025-01-28",
+    "category": "Transport",
+    "amount": 14.12
+  },
+  {
+    "date": "2025-01-28",
+    "category": "Transport",
+    "amount": 7.09
+  },
+  {
+    "date": "2025-01-29",
+    "category": "Food",
+    "amount": 22.09
+  },
+  {
+    "date": "2025-01-29",
+    "category": "Shopping",
+    "amount": 95.27
+  },
+  {
+    "date": "2025-01-30",
+    "category": "Food",
+    "amount": 34.6
+  },
+  {
+    "date": "2025-01-30",
+    "category": "Transport",
+    "amount": 6.69
+  },
+  {
+    "date": "2025-01-30",
+    "category": "Shopping",
+    "amount": 57.6
+  },
+  {
+    "date": "2025-01-30",
+    "category": "Health",
+    "amount": 56.36
+  },
+  {
+    "date": "2025-01-30",
+    "category": "Others",
+    "amount": 13.85
+  },
+  {
+    "date": "2025-01-31",
+    "category": "Transport",
+    "amount": 8.86
+  },
+  {
+    "date": "2025-01-31",
+    "category": "Entertainment",
+    "amount": 26.7
+  },
+  {
+    "date": "2025-02-01",
+    "category": "Shopping",
+    "amount": 142.89
+  },
+  {
+    "date": "2025-02-02",
+    "category": "Food",
+    "amount": 10.11
+  },
+  {
+    "date": "2025-02-02",
+    "category": "Transport",
+    "amount": 6.01
+  },
+  {
+    "date": "2025-02-03",
+    "category": "Food",
+    "amount": 23.48
+  },
+  {
+    "date": "2025-02-04",
+    "category": "Transport",
+    "amount": 29.3
+  },
+  {
+    "date": "2025-02-04",
+    "category": "Bills",
+    "amount": 271.16
+  },
+  {
+    "date": "2025-02-05",
+    "category": "Food",
+    "amount": 12.03
+  },
+  {
+    "date": "2025-02-05",
+    "category": "Transport",
+    "amount": 34.14
+  },
+  {
+    "date": "2025-02-05",
+    "category": "Others",
+    "amount": 15.39
+  },
+  {
+    "date": "2025-02-08",
+    "category": "Transport",
+    "amount": 14.87
+  },
+  {
+    "date": "2025-02-09",
+    "category": "Transport",
+    "amount": 3.02
+  },
+  {
+    "date": "2025-02-09",
+    "category": "Transport",
+    "amount": 9.98
+  },
+  {
+    "date": "2025-02-10",
+    "category": "Transport",
+    "amount": 18.94
+  },
+  {
+    "date": "2025-02-10",
+    "category": "Health",
+    "amount": 52.79
+  },
+  {
+    "date": "2025-02-10",
+    "category": "Health",
+    "amount": 79.27
+  },
+  {
+    "date": "2025-02-11",
+    "category": "Food",
+    "amount": 24.52
+  },
+  {
+    "date": "2025-02-12",
+    "category": "Food",
+    "amount": 12.02
+  },
+  {
+    "date": "2025-02-12",
+    "category": "Transport",
+    "amount": 4.56
+  },
+  {
+    "date": "2025-02-12",
+    "category": "Transport",
+    "amount": 10.56
+  },
+  {
+    "date": "2025-02-12",
+    "category": "Transport",
+    "amount": 10.28
+  },
+  {
+    "date": "2025-02-12",
+    "category": "Bills",
+    "amount": 54.89
+  },
+  {
+    "date": "2025-02-12",
+    "category": "Bills",
+    "amount": 349.25
+  },
+  {
+    "date": "2025-02-12",
+    "category": "Others",
+    "amount": 71.8
+  },
+  {
+    "date": "2025-02-13",
+    "category": "Food",
+    "amount": 48.6
+  },
+  {
+    "date": "2025-02-13",
+    "category": "Food",
+    "amount": 25.2
+  },
+  {
+    "date": "2025-02-13",
+    "category": "Food",
+    "amount": 45.51
+  },
+  {
+    "date": "2025-02-13",
+    "category": "Transport",
+    "amount": 8.33
+  },
+  {
+    "date": "2025-02-13",
+    "category": "Entertainment",
+    "amount": 25.66
+  },
+  {
+    "date": "2025-02-14",
+    "category": "Bills",
+    "amount": 218.85
+  },
+  {
+    "date": "2025-02-14",
+    "category": "Others",
+    "amount": 38.07
+  },
+  {
+    "date": "2025-02-15",
+    "category": "Food",
+    "amount": 31.76
+  },
+  {
+    "date": "2025-02-15",
+    "category": "Food",
+    "amount": 13.8
+  },
+  {
+    "date": "2025-02-15",
+    "category": "Transport",
+    "amount": 17.94
+  },
+  {
+    "date": "2025-02-15",
+    "category": "Others",
+    "amount": 40.62
+  },
+  {
+    "date": "2025-02-16",
+    "category": "Shopping",
+    "amount": 181.07
+  },
+  {
+    "date": "2025-02-17",
+    "category": "Food",
+    "amount": 25.52
+  },
+  {
+    "date": "2025-02-17",
+    "category": "Transport",
+    "amount": 6.01
+  },
+  {
+    "date": "2025-02-17",
+    "category": "Bills",
+    "amount": 107.49
+  },
+  {
+    "date": "2025-02-18",
+    "category": "Food",
+    "amount": 16.67
+  },
+  {
+    "date": "2025-02-18",
+    "category": "Food",
+    "amount": 50.83
+  },
+  {
+    "date": "2025-02-18",
+    "category": "Entertainment",
+    "amount": 15.83
+  },
+  {
+    "date": "2025-02-19",
+    "category": "Transport",
+    "amount": 31.48
+  },
+  {
+    "date": "2025-02-19",
+    "category": "Transport",
+    "amount": 18.09
+  },
+  {
+    "date": "2025-02-19",
+    "category": "Shopping",
+    "amount": 105.69
+  },
+  {
+    "date": "2025-02-19",
+    "category": "Entertainment",
+    "amount": 28.22
+  },
+  {
+    "date": "2025-02-20",
+    "category": "Food",
+    "amount": 46.99
+  },
+  {
+    "date": "2025-02-20",
+    "category": "Shopping",
+    "amount": 114.08
+  },
+  {
+    "date": "2025-02-21",
+    "category": "Food",
+    "amount": 31.83
+  },
+  {
+    "date": "2025-02-21",
+    "category": "Food",
+    "amount": 17.06
+  },
+  {
+    "date": "2025-02-21",
+    "category": "Shopping",
+    "amount": 110.45
+  },
+  {
+    "date": "2025-02-22",
+    "category": "Transport",
+    "amount": 8.03
+  },
+  {
+    "date": "2025-02-22",
+    "category": "Shopping",
+    "amount": 67.15
+  },
+  {
+    "date": "2025-02-22",
+    "category": "Health",
+    "amount": 50.1
+  },
+  {
+    "date": "2025-02-22",
+    "category": "Education",
+    "amount": 61.85
+  },
+  {
+    "date": "2025-02-23",
+    "category": "Transport",
+    "amount": 2.07
+  },
+  {
+    "date": "2025-02-23",
+    "category": "Bills",
+    "amount": 136.02
+  },
+  {
+    "date": "2025-02-23",
+    "category": "Education",
+    "amount": 93.29
+  },
+  {
+    "date": "2025-02-23",
+    "category": "Education",
+    "amount": 58.48
+  },
+  {
+    "date": "2025-02-25",
+    "category": "Food",
+    "amount": 15.24
+  },
+  {
+    "date": "2025-02-25",
+    "category": "Transport",
+    "amount": 26.79
+  },
+  {
+    "date": "2025-02-25",
+    "category": "Transport",
+    "amount": 33.82
+  },
+  {
+    "date": "2025-02-25",
+    "category": "Others",
+    "amount": 19.73
+  },
+  {
+    "date": "2025-02-26",
+    "category": "Food",
+    "amount": 54.34
+  },
+  {
+    "date": "2025-02-26",
+    "category": "Food",
+    "amount": 24.32
+  },
+  {
+    "date": "2025-02-26",
+    "category": "Entertainment",
+    "amount": 42.27
+  },
+  {
+    "date": "2025-02-27",
+    "category": "Food",
+    "amount": 17.17
+  },
+  {
+    "date": "2025-02-27",
+    "category": "Transport",
+    "amount": 8.17
+  },
+  {
+    "date": "2025-03-01",
+    "category": "Food",
+    "amount": 28.55
+  },
+  {
+    "date": "2025-03-01",
+    "category": "Transport",
+    "amount": 3.39
+  },
+  {
+    "date": "2025-03-01",
+    "category": "Shopping",
+    "amount": 59.34
+  },
+  {
+    "date": "2025-03-02",
+    "category": "Food",
+    "amount": 13.98
+  },
+  {
+    "date": "2025-03-02",
+    "category": "Transport",
+    "amount": 8.22
+  },
+  {
+    "date": "2025-03-02",
+    "category": "Bills",
+    "amount": 128.08
+  },
+  {
+    "date": "2025-03-03",
+    "category": "Health",
+    "amount": 61.8
+  },
+  {
+    "date": "2025-03-04",
+    "category": "Transport",
+    "amount": 29.03
+  },
+  {
+    "date": "2025-03-04",
+    "category": "Transport",
+    "amount": 18.89
+  },
+  {
+    "date": "2025-03-06",
+    "category": "Food",
+    "amount": 22.53
+  },
+  {
+    "date": "2025-03-06",
+    "category": "Bills",
+    "amount": 142.1
+  },
+  {
+    "date": "2025-03-06",
+    "category": "Education",
+    "amount": 33.61
+  },
+  {
+    "date": "2025-03-07",
+    "category": "Food",
+    "amount": 44.31
+  },
+  {
+    "date": "2025-03-07",
+    "category": "Food",
+    "amount": 35.7
+  },
+  {
+    "date": "2025-03-07",
+    "category": "Transport",
+    "amount": 4.05
+  },
+  {
+    "date": "2025-03-09",
+    "category": "Education",
+    "amount": 38.25
+  },
+  {
+    "date": "2025-03-10",
+    "category": "Food",
+    "amount": 7.09
+  },
+  {
+    "date": "2025-03-10",
+    "category": "Transport",
+    "amount": 15.99
+  },
+  {
+    "date": "2025-03-10",
+    "category": "Bills",
+    "amount": 336.08
+  },
+  {
+    "date": "2025-03-11",
+    "category": "Transport",
+    "amount": 21.58
+  },
+  {
+    "date": "2025-03-11",
+    "category": "Transport",
+    "amount": 17.52
+  },
+  {
+    "date": "2025-03-12",
+    "category": "Food",
+    "amount": 23.27
+  },
+  {
+    "date": "2025-03-12",
+    "category": "Transport",
+    "amount": 24.28
+  },
+  {
+    "date": "2025-03-12",
+    "category": "Entertainment",
+    "amount": 17.66
+  },
+  {
+    "date": "2025-03-13",
+    "category": "Food",
+    "amount": 38.73
+  },
+  {
+    "date": "2025-03-14",
+    "category": "Food",
+    "amount": 66.72
+  },
+  {
+    "date": "2025-03-14",
+    "category": "Food",
+    "amount": 33.63
+  },
+  {
+    "date": "2025-03-14",
+    "category": "Transport",
+    "amount": 5.69
+  },
+  {
+    "date": "2025-03-14",
+    "category": "Transport",
+    "amount": 20.83
+  },
+  {
+    "date": "2025-03-14",
+    "category": "Shopping",
+    "amount": 96.61
+  },
+  {
+    "date": "2025-03-16",
+    "category": "Transport",
+    "amount": 6.99
+  },
+  {
+    "date": "2025-03-16",
+    "category": "Health",
+    "amount": 66.23
+  },
+  {
+    "date": "2025-03-16",
+    "category": "Health",
+    "amount": 33.92
+  },
+  {
+    "date": "2025-03-16",
+    "category": "Entertainment",
+    "amount": 72.29
+  },
+  {
+    "date": "2025-03-17",
+    "category": "Food",
+    "amount": 33.4
+  },
+  {
+    "date": "2025-03-18",
+    "category": "Food",
+    "amount": 34.15
+  },
+  {
+    "date": "2025-03-18",
+    "category": "Bills",
+    "amount": 130.75
+  },
+  {
+    "date": "2025-03-18",
+    "category": "Entertainment",
+    "amount": 12.5
+  },
+  {
+    "date": "2025-03-18",
+    "category": "Others",
+    "amount": 54.8
+  },
+  {
+    "date": "2025-03-19",
+    "category": "Transport",
+    "amount": 26.79
+  },
+  {
+    "date": "2025-03-19",
+    "category": "Shopping",
+    "amount": 109.24
+  },
+  {
+    "date": "2025-03-19",
+    "category": "Shopping",
+    "amount": 120.77
+  },
+  {
+    "date": "2025-03-19",
+    "category": "Others",
+    "amount": 50.04
+  },
+  {
+    "date": "2025-03-20",
+    "category": "Food",
+    "amount": 27.26
+  },
+  {
+    "date": "2025-03-21",
+    "category": "Shopping",
+    "amount": 24.27
+  },
+  {
+    "date": "2025-03-21",
+    "category": "Others",
+    "amount": 55.79
+  },
+  {
+    "date": "2025-03-22",
+    "category": "Food",
+    "amount": 37.83
+  },
+  {
+    "date": "2025-03-22",
+    "category": "Shopping",
+    "amount": 128.34
+  },
+  {
+    "date": "2025-03-22",
+    "category": "Education",
+    "amount": 102.49
+  },
+  {
+    "date": "2025-03-23",
+    "category": "Food",
+    "amount": 15.45
+  },
+  {
+    "date": "2025-03-23",
+    "category": "Transport",
+    "amount": 2.62
+  },
+  {
+    "date": "2025-03-24",
+    "category": "Food",
+    "amount": 7.04
+  },
+  {
+    "date": "2025-03-24",
+    "category": "Bills",
+    "amount": 138.42
+  },
+  {
+    "date": "2025-03-24",
+    "category": "Others",
+    "amount": 71.18
+  },
+  {
+    "date": "2025-03-25",
+    "category": "Food",
+    "amount": 36.02
+  },
+  {
+    "date": "2025-03-25",
+    "category": "Transport",
+    "amount": 17.69
+  },
+  {
+    "date": "2025-03-25",
+    "category": "Bills",
+    "amount": 99.29
+  },
+  {
+    "date": "2025-03-26",
+    "category": "Transport",
+    "amount": 31.64
+  },
+  {
+    "date": "2025-03-26",
+    "category": "Transport",
+    "amount": 20.46
+  },
+  {
+    "date": "2025-03-26",
+    "category": "Transport",
+    "amount": 27.51
+  },
+  {
+    "date": "2025-03-27",
+    "category": "Food",
+    "amount": 54.1
+  },
+  {
+    "date": "2025-03-29",
+    "category": "Food",
+    "amount": 25.2
+  },
+  {
+    "date": "2025-03-29",
+    "category": "Shopping",
+    "amount": 103.06
+  },
+  {
+    "date": "2025-03-29",
+    "category": "Education",
+    "amount": 136.73
+  },
+  {
+    "date": "2025-03-30",
+    "category": "Food",
+    "amount": 20.52
+  },
+  {
+    "date": "2025-03-30",
+    "category": "Food",
+    "amount": 16.79
+  },
+  {
+    "date": "2025-03-30",
+    "category": "Transport",
+    "amount": 9.89
+  },
+  {
+    "date": "2025-03-30",
+    "category": "Others",
+    "amount": 36.47
+  },
+  {
+    "date": "2025-03-31",
+    "category": "Food",
+    "amount": 15.23
+  },
+  {
+    "date": "2025-03-31",
+    "category": "Transport",
+    "amount": 10.1
+  },
+  {
+    "date": "2025-03-31",
+    "category": "Shopping",
+    "amount": 70.85
+  },
+  {
+    "date": "2025-03-31",
+    "category": "Shopping",
+    "amount": 74.51
+  },
+  {
+    "date": "2025-03-31",
+    "category": "Entertainment",
+    "amount": 32.13
+  },
+  {
+    "date": "2025-04-02",
+    "category": "Food",
+    "amount": 33.62
+  },
+  {
+    "date": "2025-04-02",
+    "category": "Health",
+    "amount": 55.05
+  },
+  {
+    "date": "2025-04-02",
+    "category": "Others",
+    "amount": 29.3
+  },
+  {
+    "date": "2025-04-03",
+    "category": "Food",
+    "amount": 12.56
+  },
+  {
+    "date": "2025-04-03",
+    "category": "Food",
+    "amount": 16.17
+  },
+  {
+    "date": "2025-04-03",
+    "category": "Transport",
+    "amount": 20.81
+  },
+  {
+    "date": "2025-04-03",
+    "category": "Shopping",
+    "amount": 124.47
+  },
+  {
+    "date": "2025-04-04",
+    "category": "Food",
+    "amount": 17.68
+  },
+  {
+    "date": "2025-04-04",
+    "category": "Food",
+    "amount": 49.83
+  },
+  {
+    "date": "2025-04-04",
+    "category": "Entertainment",
+    "amount": 22.08
+  },
+  {
+    "date": "2025-04-05",
+    "category": "Food",
+    "amount": 34.85
+  },
+  {
+    "date": "2025-04-05",
+    "category": "Transport",
+    "amount": 12.86
+  },
+  {
+    "date": "2025-04-05",
+    "category": "Shopping",
+    "amount": 195.87
+  },
+  {
+    "date": "2025-04-05",
+    "category": "Shopping",
+    "amount": 138.73
+  },
+  {
+    "date": "2025-04-05",
+    "category": "Health",
+    "amount": 69.47
+  },
+  {
+    "date": "2025-04-06",
+    "category": "Food",
+    "amount": 36.28
+  },
+  {
+    "date": "2025-04-06",
+    "category": "Transport",
+    "amount": 11.14
+  },
+  {
+    "date": "2025-04-07",
+    "category": "Food",
+    "amount": 18.52
+  },
+  {
+    "date": "2025-04-07",
+    "category": "Transport",
+    "amount": 14.88
+  },
+  {
+    "date": "2025-04-08",
+    "category": "Food",
+    "amount": 40.5
+  },
+  {
+    "date": "2025-04-10",
+    "category": "Food",
+    "amount": 11.24
+  },
+  {
+    "date": "2025-04-10",
+    "category": "Transport",
+    "amount": 14.37
+  },
+  {
+    "date": "2025-04-10",
+    "category": "Bills",
+    "amount": 176.61
+  },
+  {
+    "date": "2025-04-11",
+    "category": "Transport",
+    "amount": 15.43
+  },
+  {
+    "date": "2025-04-12",
+    "category": "Transport",
+    "amount": 14.54
+  },
+  {
+    "date": "2025-04-12",
+    "category": "Entertainment",
+    "amount": 47.48
+  },
+  {
+    "date": "2025-04-13",
+    "category": "Food",
+    "amount": 27.67
+  },
+  {
+    "date": "2025-04-13",
+    "category": "Food",
+    "amount": 28.27
+  },
+  {
+    "date": "2025-04-13",
+    "category": "Shopping",
+    "amount": 32.45
+  },
+  {
+    "date": "2025-04-14",
+    "category": "Food",
+    "amount": 32.34
+  },
+  {
+    "date": "2025-04-14",
+    "category": "Transport",
+    "amount": 19.04
+  },
+  {
+    "date": "2025-04-15",
+    "category": "Shopping",
+    "amount": 27.16
+  },
+  {
+    "date": "2025-04-15",
+    "category": "Others",
+    "amount": 26.13
+  },
+  {
+    "date": "2025-04-16",
+    "category": "Shopping",
+    "amount": 74.2
+  },
+  {
+    "date": "2025-04-17",
+    "category": "Transport",
+    "amount": 11.11
+  },
+  {
+    "date": "2025-04-18",
+    "category": "Transport",
+    "amount": 6.36
+  },
+  {
+    "date": "2025-04-18",
+    "category": "Bills",
+    "amount": 337.93
+  },
+  {
+    "date": "2025-04-18",
+    "category": "Entertainment",
+    "amount": 41.85
+  },
+  {
+    "date": "2025-04-18",
+    "category": "Others",
+    "amount": 10.17
+  },
+  {
+    "date": "2025-04-18",
+    "category": "Others",
+    "amount": 34.46
+  },
+  {
+    "date": "2025-04-19",
+    "category": "Food",
+    "amount": 12.29
+  },
+  {
+    "date": "2025-04-19",
+    "category": "Food",
+    "amount": 41.89
+  },
+  {
+    "date": "2025-04-20",
+    "category": "Food",
+    "amount": 14.86
+  },
+  {
+    "date": "2025-04-20",
+    "category": "Bills",
+    "amount": 100.68
+  },
+  {
+    "date": "2025-04-20",
+    "category": "Education",
+    "amount": 118.47
+  },
+  {
+    "date": "2025-04-21",
+    "category": "Food",
+    "amount": 23.35
+  },
+  {
+    "date": "2025-04-21",
+    "category": "Transport",
+    "amount": 27.22
+  },
+  {
+    "date": "2025-04-22",
+    "category": "Food",
+    "amount": 22.58
+  },
+  {
+    "date": "2025-04-22",
+    "category": "Transport",
+    "amount": 12.42
+  },
+  {
+    "date": "2025-04-22",
+    "category": "Transport",
+    "amount": 17.35
+  },
+  {
+    "date": "2025-04-23",
+    "category": "Transport",
+    "amount": 5.63
+  },
+  {
+    "date": "2025-04-23",
+    "category": "Shopping",
+    "amount": 106.5
+  },
+  {
+    "date": "2025-04-25",
+    "category": "Transport",
+    "amount": 10.07
+  },
+  {
+    "date": "2025-04-26",
+    "category": "Entertainment",
+    "amount": 81.74
+  },
+  {
+    "date": "2025-04-26",
+    "category": "Entertainment",
+    "amount": 78.77
+  },
+  {
+    "date": "2025-04-27",
+    "category": "Food",
+    "amount": 19.76
+  },
+  {
+    "date": "2025-04-27",
+    "category": "Bills",
+    "amount": 223.28
+  },
+  {
+    "date": "2025-04-28",
+    "category": "Food",
+    "amount": 20.55
+  },
+  {
+    "date": "2025-04-28",
+    "category": "Food",
+    "amount": 34.2
+  },
+  {
+    "date": "2025-04-28",
+    "category": "Transport",
+    "amount": 6.91
+  },
+  {
+    "date": "2025-04-28",
+    "category": "Education",
+    "amount": 229.05
+  },
+  {
+    "date": "2025-04-28",
+    "category": "Others",
+    "amount": 44.79
+  },
+  {
+    "date": "2025-04-29",
+    "category": "Bills",
+    "amount": 269.64
+  },
+  {
+    "date": "2025-04-29",
+    "category": "Education",
+    "amount": 68.88
+  },
+  {
+    "date": "2025-04-30",
+    "category": "Food",
+    "amount": 13.88
+  },
+  {
+    "date": "2025-04-30",
+    "category": "Health",
+    "amount": 80.0
+  },
+  {
+    "date": "2025-04-30",
+    "category": "Entertainment",
+    "amount": 13.09
+  },
+  {
+    "date": "2025-05-01",
+    "category": "Transport",
+    "amount": 10.43
+  },
+  {
+    "date": "2025-05-01",
+    "category": "Shopping",
+    "amount": 111.22
+  },
+  {
+    "date": "2025-05-01",
+    "category": "Bills",
+    "amount": 172.64
+  },
+  {
+    "date": "2025-05-02",
+    "category": "Food",
+    "amount": 13.43
+  },
+  {
+    "date": "2025-05-02",
+    "category": "Food",
+    "amount": 31.4
+  },
+  {
+    "date": "2025-05-03",
+    "category": "Food",
+    "amount": 10.8
+  },
+  {
+    "date": "2025-05-03",
+    "category": "Food",
+    "amount": 21.99
+  },
+  {
+    "date": "2025-05-03",
+    "category": "Transport",
+    "amount": 7.54
+  },
+  {
+    "date": "2025-05-03",
+    "category": "Entertainment",
+    "amount": 25.18
+  },
+  {
+    "date": "2025-05-05",
+    "category": "Food",
+    "amount": 8.2
+  },
+  {
+    "date": "2025-05-05",
+    "category": "Others",
+    "amount": 30.63
+  },
+  {
+    "date": "2025-05-06",
+    "category": "Bills",
+    "amount": 80.53
+  },
+  {
+    "date": "2025-05-07",
+    "category": "Food",
+    "amount": 47.05
+  },
+  {
+    "date": "2025-05-07",
+    "category": "Food",
+    "amount": 24.6
+  },
+  {
+    "date": "2025-05-07",
+    "category": "Shopping",
+    "amount": 60.37
+  },
+  {
+    "date": "2025-05-07",
+    "category": "Shopping",
+    "amount": 156.78
+  },
+  {
+    "date": "2025-05-07",
+    "category": "Others",
+    "amount": 23.74
+  },
+  {
+    "date": "2025-05-08",
+    "category": "Transport",
+    "amount": 22.07
+  },
+  {
+    "date": "2025-05-08",
+    "category": "Entertainment",
+    "amount": 26.04
+  },
+  {
+    "date": "2025-05-09",
+    "category": "Transport",
+    "amount": 10.12
+  },
+  {
+    "date": "2025-05-09",
+    "category": "Transport",
+    "amount": 18.96
+  },
+  {
+    "date": "2025-05-09",
+    "category": "Shopping",
+    "amount": 195.04
+  },
+  {
+    "date": "2025-05-10",
+    "category": "Food",
+    "amount": 21.95
+  },
+  {
+    "date": "2025-05-10",
+    "category": "Food",
+    "amount": 43.44
+  },
+  {
+    "date": "2025-05-10",
+    "category": "Shopping",
+    "amount": 215.57
+  },
+  {
+    "date": "2025-05-10",
+    "category": "Education",
+    "amount": 166.25
+  },
+  {
+    "date": "2025-05-10",
+    "category": "Education",
+    "amount": 47.85
+  },
+  {
+    "date": "2025-05-11",
+    "category": "Food",
+    "amount": 31.39
+  },
+  {
+    "date": "2025-05-13",
+    "category": "Food",
+    "amount": 20.69
+  },
+  {
+    "date": "2025-05-13",
+    "category": "Food",
+    "amount": 41.14
+  },
+  {
+    "date": "2025-05-13",
+    "category": "Food",
+    "amount": 48.68
+  },
+  {
+    "date": "2025-05-13",
+    "category": "Entertainment",
+    "amount": 14.74
+  },
+  {
+    "date": "2025-05-14",
+    "category": "Food",
+    "amount": 46.9
+  },
+  {
+    "date": "2025-05-14",
+    "category": "Entertainment",
+    "amount": 41.27
+  },
+  {
+    "date": "2025-05-15",
+    "category": "Food",
+    "amount": 48.12
+  },
+  {
+    "date": "2025-05-15",
+    "category": "Transport",
+    "amount": 18.38
+  },
+  {
+    "date": "2025-05-15",
+    "category": "Transport",
+    "amount": 9.74
+  },
+  {
+    "date": "2025-05-15",
+    "category": "Transport",
+    "amount": 23.17
+  },
+  {
+    "date": "2025-05-15",
+    "category": "Others",
+    "amount": 81.15
+  },
+  {
+    "date": "2025-05-16",
+    "category": "Transport",
+    "amount": 18.91
+  },
+  {
+    "date": "2025-05-17",
+    "category": "Food",
+    "amount": 45.49
+  },
+  {
+    "date": "2025-05-18",
+    "category": "Food",
+    "amount": 20.61
+  },
+  {
+    "date": "2025-05-18",
+    "category": "Transport",
+    "amount": 6.17
+  },
+  {
+    "date": "2025-05-20",
+    "category": "Food",
+    "amount": 37.99
+  },
+  {
+    "date": "2025-05-20",
+    "category": "Food",
+    "amount": 29.57
+  },
+  {
+    "date": "2025-05-21",
+    "category": "Shopping",
+    "amount": 140.84
+  },
+  {
+    "date": "2025-05-21",
+    "category": "Health",
+    "amount": 29.61
+  },
+  {
+    "date": "2025-05-21",
+    "category": "Education",
+    "amount": 207.28
+  },
+  {
+    "date": "2025-05-21",
+    "category": "Entertainment",
+    "amount": 26.91
+  },
+  {
+    "date": "2025-05-22",
+    "category": "Food",
+    "amount": 43.23
+  },
+  {
+    "date": "2025-05-22",
+    "category": "Transport",
+    "amount": 9.05
+  },
+  {
+    "date": "2025-05-22",
+    "category": "Bills",
+    "amount": 331.5
+  },
+  {
+    "date": "2025-05-22",
+    "category": "Others",
+    "amount": 25.76
+  },
+  {
+    "date": "2025-05-23",
+    "category": "Transport",
+    "amount": 12.6
+  },
+  {
+    "date": "2025-05-23",
+    "category": "Transport",
+    "amount": 26.37
+  },
+  {
+    "date": "2025-05-23",
+    "category": "Bills",
+    "amount": 210.56
+  },
+  {
+    "date": "2025-05-24",
+    "category": "Food",
+    "amount": 39.17
+  },
+  {
+    "date": "2025-05-25",
+    "category": "Food",
+    "amount": 19.98
+  },
+  {
+    "date": "2025-05-25",
+    "category": "Transport",
+    "amount": 3.51
+  },
+  {
+    "date": "2025-05-25",
+    "category": "Shopping",
+    "amount": 32.22
+  },
+  {
+    "date": "2025-05-25",
+    "category": "Bills",
+    "amount": 226.51
+  },
+  {
+    "date": "2025-05-25",
+    "category": "Others",
+    "amount": 56.29
+  },
+  {
+    "date": "2025-05-26",
+    "category": "Transport",
+    "amount": 29.49
+  },
+  {
+    "date": "2025-05-26",
+    "category": "Entertainment",
+    "amount": 53.54
+  },
+  {
+    "date": "2025-05-27",
+    "category": "Transport",
+    "amount": 15.93
+  },
+  {
+    "date": "2025-05-28",
+    "category": "Bills",
+    "amount": 288.9
+  },
+  {
+    "date": "2025-05-29",
+    "category": "Transport",
+    "amount": 25.38
+  },
+  {
+    "date": "2025-05-29",
+    "category": "Transport",
+    "amount": 15.92
+  },
+  {
+    "date": "2025-05-29",
+    "category": "Health",
+    "amount": 57.42
+  },
+  {
+    "date": "2025-05-30",
+    "category": "Transport",
+    "amount": 18.88
+  },
+  {
+    "date": "2025-05-30",
+    "category": "Education",
+    "amount": 139.73
+  },
+  {
+    "date": "2025-05-31",
+    "category": "Transport",
+    "amount": 13.68
+  },
+  {
+    "date": "2025-05-31",
+    "category": "Entertainment",
+    "amount": 30.7
+  },
+  {
+    "date": "2025-05-31",
+    "category": "Others",
+    "amount": 15.21
+  },
+  {
+    "date": "2025-06-02",
+    "category": "Food",
+    "amount": 29.28
+  },
+  {
+    "date": "2025-06-02",
+    "category": "Food",
+    "amount": 29.13
+  },
+  {
+    "date": "2025-06-02",
+    "category": "Food",
+    "amount": 27.37
+  },
+  {
+    "date": "2025-06-02",
+    "category": "Shopping",
+    "amount": 189.28
+  },
+  {
+    "date": "2025-06-02",
+    "category": "Education",
+    "amount": 110.11
+  },
+  {
+    "date": "2025-06-03",
+    "category": "Food",
+    "amount": 18.58
+  },
+  {
+    "date": "2025-06-03",
+    "category": "Transport",
+    "amount": 23.91
+  },
+  {
+    "date": "2025-06-03",
+    "category": "Transport",
+    "amount": 9.94
+  },
+  {
+    "date": "2025-06-03",
+    "category": "Entertainment",
+    "amount": 20.26
+  },
+  {
+    "date": "2025-06-04",
+    "category": "Food",
+    "amount": 24.08
+  },
+  {
+    "date": "2025-06-04",
+    "category": "Transport",
+    "amount": 11.55
+  },
+  {
+    "date": "2025-06-04",
+    "category": "Others",
+    "amount": 38.03
+  },
+  {
+    "date": "2025-06-05",
+    "category": "Food",
+    "amount": 23.72
+  },
+  {
+    "date": "2025-06-05",
+    "category": "Transport",
+    "amount": 23.15
+  },
+  {
+    "date": "2025-06-05",
+    "category": "Education",
+    "amount": 83.8
+  },
+  {
+    "date": "2025-06-05",
+    "category": "Entertainment",
+    "amount": 31.59
+  },
+  {
+    "date": "2025-06-06",
+    "category": "Food",
+    "amount": 14.52
+  },
+  {
+    "date": "2025-06-06",
+    "category": "Food",
+    "amount": 40.69
+  },
+  {
+    "date": "2025-06-06",
+    "category": "Food",
+    "amount": 50.25
+  },
+  {
+    "date": "2025-06-06",
+    "category": "Shopping",
+    "amount": 55.81
+  },
+  {
+    "date": "2025-06-06",
+    "category": "Shopping",
+    "amount": 204.75
+  },
+  {
+    "date": "2025-06-06",
+    "category": "Bills",
+    "amount": 71.19
+  },
+  {
+    "date": "2025-06-07",
+    "category": "Food",
+    "amount": 26.84
+  },
+  {
+    "date": "2025-06-07",
+    "category": "Entertainment",
+    "amount": 31.92
+  },
+  {
+    "date": "2025-06-08",
+    "category": "Bills",
+    "amount": 181.53
+  },
+  {
+    "date": "2025-06-09",
+    "category": "Shopping",
+    "amount": 69.09
+  },
+  {
+    "date": "2025-06-09",
+    "category": "Bills",
+    "amount": 255.59
+  },
+  {
+    "date": "2025-06-09",
+    "category": "Education",
+    "amount": 80.64
+  },
+  {
+    "date": "2025-06-10",
+    "category": "Bills",
+    "amount": 221.1
+  },
+  {
+    "date": "2025-06-11",
+    "category": "Food",
+    "amount": 23.61
+  },
+  {
+    "date": "2025-06-12",
+    "category": "Health",
+    "amount": 78.43
+  },
+  {
+    "date": "2025-06-12",
+    "category": "Others",
+    "amount": 60.21
+  },
+  {
+    "date": "2025-06-13",
+    "category": "Food",
+    "amount": 64.95
+  },
+  {
+    "date": "2025-06-13",
+    "category": "Food",
+    "amount": 27.16
+  },
+  {
+    "date": "2025-06-13",
+    "category": "Transport",
+    "amount": 5.05
+  },
+  {
+    "date": "2025-06-13",
+    "category": "Shopping",
+    "amount": 68.4
+  },
+  {
+    "date": "2025-06-14",
+    "category": "Transport",
+    "amount": 19.25
+  },
+  {
+    "date": "2025-06-15",
+    "category": "Shopping",
+    "amount": 237.83
+  },
+  {
+    "date": "2025-06-17",
+    "category": "Transport",
+    "amount": 14.34
+  },
+  {
+    "date": "2025-06-17",
+    "category": "Transport",
+    "amount": 28.01
+  },
+  {
+    "date": "2025-06-18",
+    "category": "Food",
+    "amount": 13.15
+  },
+  {
+    "date": "2025-06-18",
+    "category": "Transport",
+    "amount": 30.99
+  },
+  {
+    "date": "2025-06-18",
+    "category": "Bills",
+    "amount": 299.43
+  },
+  {
+    "date": "2025-06-18",
+    "category": "Health",
+    "amount": 61.91
+  },
+  {
+    "date": "2025-06-19",
+    "category": "Food",
+    "amount": 42.43
+  },
+  {
+    "date": "2025-06-19",
+    "category": "Transport",
+    "amount": 17.63
+  },
+  {
+    "date": "2025-06-19",
+    "category": "Transport",
+    "amount": 27.08
+  },
+  {
+    "date": "2025-06-19",
+    "category": "Shopping",
+    "amount": 72.19
+  },
+  {
+    "date": "2025-06-20",
+    "category": "Food",
+    "amount": 23.36
+  },
+  {
+    "date": "2025-06-20",
+    "category": "Food",
+    "amount": 42.37
+  },
+  {
+    "date": "2025-06-21",
+    "category": "Food",
+    "amount": 49.9
+  },
+  {
+    "date": "2025-06-23",
+    "category": "Food",
+    "amount": 22.8
+  },
+  {
+    "date": "2025-06-24",
+    "category": "Food",
+    "amount": 35.75
+  },
+  {
+    "date": "2025-06-24",
+    "category": "Transport",
+    "amount": 5.88
+  },
+  {
+    "date": "2025-06-24",
+    "category": "Transport",
+    "amount": 35.32
+  },
+  {
+    "date": "2025-06-25",
+    "category": "Food",
+    "amount": 39.95
+  },
+  {
+    "date": "2025-06-25",
+    "category": "Food",
+    "amount": 42.89
+  },
+  {
+    "date": "2025-06-25",
+    "category": "Transport",
+    "amount": 22.06
+  },
+  {
+    "date": "2025-06-25",
+    "category": "Transport",
+    "amount": 9.86
+  },
+  {
+    "date": "2025-06-25",
+    "category": "Shopping",
+    "amount": 69.64
+  },
+  {
+    "date": "2025-06-25",
+    "category": "Bills",
+    "amount": 384.9
+  },
+  {
+    "date": "2025-06-26",
+    "category": "Food",
+    "amount": 11.38
+  },
+  {
+    "date": "2025-06-26",
+    "category": "Others",
+    "amount": 35.65
+  },
+  {
+    "date": "2025-06-26",
+    "category": "Others",
+    "amount": 20.64
+  },
+  {
+    "date": "2025-06-28",
+    "category": "Food",
+    "amount": 33.38
+  },
+  {
+    "date": "2025-06-29",
+    "category": "Food",
+    "amount": 32.97
+  }
+]
