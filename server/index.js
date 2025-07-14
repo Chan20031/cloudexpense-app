@@ -31,14 +31,34 @@ app.use(express.json());
 // JWT Secret
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
-// Email configuration
+// Email configuration - Use AWS SES for production, Gmail for local development
+const isProduction = process.env.NODE_ENV === 'production';
+
 const transporter = nodemailer.createTransport({
-  service: process.env.EMAIL_SERVICE || 'gmail',
+  host: isProduction 
+    ? `email-smtp.${process.env.AWS_SES_REGION || 'us-east-1'}.amazonaws.com`
+    : 'smtp.gmail.com',
+  port: 587,
+  secure: false,
   auth: {
-    user: process.env.EMAIL_USER || 'your-email@gmail.com',
-    pass: (process.env.EMAIL_PASSWORD || 'your-email-password').replace(/\s/g, '') // Remove any spaces from app password
+    user: isProduction 
+      ? process.env.SES_SMTP_USERNAME 
+      : process.env.EMAIL_USER,
+    pass: isProduction 
+      ? process.env.SES_SMTP_PASSWORD 
+      : (process.env.EMAIL_PASSWORD || 'your-email-password').replace(/\s/g, '')
+  },
+  tls: {
+    rejectUnauthorized: false
   }
 });
+
+// Email sender address - use verified SES email in production
+const getEmailSender = () => {
+  return isProduction 
+    ? process.env.EMAIL_USER || 'noreply@cloudexpense.com'  // Use your verified SES email
+    : process.env.EMAIL_USER || 'your-email@gmail.com';
+};
 
 // Helper function to generate tokens
 const generateToken = () => {
@@ -116,7 +136,7 @@ app.post('/api/auth/register', async (req, res) => {
     const verificationUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/verify-email?token=${verificationToken}`;
     
     const mailOptions = {
-      from: process.env.EMAIL_USER || 'your-email@gmail.com',
+      from: getEmailSender(),
       to: email,
       subject: 'Verify Your Email - CloudExpense',
       html: `
@@ -395,7 +415,7 @@ app.post('/api/auth/forgot-password', async (req, res) => {
     const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/reset-password?token=${resetToken}`;
     
     const mailOptions = {
-      from: process.env.EMAIL_USER || 'your-email@gmail.com',
+      from: getEmailSender(),
       to: email,
       subject: 'Password Reset - CloudExpense',
       html: `
@@ -672,14 +692,15 @@ app.post('/api/debug/test-email', async (req, res) => {
     
     // Send test email
     const info = await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+      from: getEmailSender(),
       to: process.env.EMAIL_USER,
       subject: 'CloudExpense Production Email Test',
       html: `
         <h1>Production Email Test</h1>
-        <p>This email was sent from the production App Runner environment.</p>
+        <p>This email was sent from the production App Runner environment using ${isProduction ? 'AWS SES' : 'Gmail SMTP'}.</p>
         <p>Sent at: ${new Date().toISOString()}</p>
-        <p>Environment: App Runner Production</p>
+        <p>Environment: ${isProduction ? 'App Runner Production (SES)' : 'Local Development (Gmail)'}</p>
+        <p>From: ${getEmailSender()}</p>
       `
     });
     
