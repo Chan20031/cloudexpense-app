@@ -32,10 +32,12 @@ run:
       value: cloudexpense
     - name: JWT_SECRET
       value: 7f4df5bc9bedfa7acbf4d3ca212abd31e8b70c2d7c125641d0a8d2e8af4ff326
-    - name: EMAIL_USER
+    - name: SENDGRID_API_KEY
+      value: SET_IN_APP_RUNNER_CONSOLE
+    - name: FROM_EMAIL
       value: zixue4399@gmail.com
-    - name: EMAIL_PASSWORD
-      value: yuco eqge wqak qydc
+    - name: FROM_NAME
+      value: CloudExpense
     - name: FRONTEND_URL
       value: https://main.d1woe51v3gv9g2.amplifyapp.com
     - name: AWS_REGION
