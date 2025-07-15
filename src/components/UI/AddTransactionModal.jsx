@@ -441,7 +441,7 @@ export default function AddTransactionModal({ isOpen, onClose }) {
                         setReceiptProcessingStep(0);
                         setReceiptProgress(0);
                       }
-                    }}}
+                    }}
                   />
                   <label htmlFor="receipt-upload">
                     <span
