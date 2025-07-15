@@ -22,6 +22,8 @@ export default function AddTransactionModal({ isOpen, onClose }) {
   const [receiptError, setReceiptError] = useState('');
   const [showCalculator, setShowCalculator] = useState(false);
   const [isProcessingReceipt, setIsProcessingReceipt] = useState(false);
+  const [receiptProcessingStep, setReceiptProcessingStep] = useState(0);
+  const [receiptProgress, setReceiptProgress] = useState(0);
 
   const expenseCategories = [
     { name: 'Food', icon: Utensils },
@@ -175,9 +177,46 @@ export default function AddTransactionModal({ isOpen, onClose }) {
 
           {/* Processing Receipt Message */}
           {isProcessingReceipt && (
-            <div className="p-3 rounded-lg mb-4 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800 flex items-center gap-2">
-              <svg className="animate-spin h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
-              Processing receipt, please wait...
+            <div className="p-4 rounded-lg mb-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
+              <div className="text-center">
+                {/* Receipt Processing Animation */}
+                <div className="relative mb-4">
+                  <div className="w-12 h-12 mx-auto mb-3 relative">
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg animate-pulse"></div>
+                    <div className="absolute inset-1 bg-white dark:bg-gray-800 rounded-md flex items-center justify-center">
+                      <span className="text-xl">📄</span>
+                    </div>
+                    {/* Scanning lines */}
+                    <div className="absolute -inset-2">
+                      <div className="w-1 h-1 bg-blue-500 rounded-full absolute top-0 left-1/2 transform -translate-x-1/2 animate-ping"></div>
+                      <div className="w-1 h-1 bg-indigo-500 rounded-full absolute bottom-0 left-1/2 transform -translate-x-1/2 animate-ping" style={{animationDelay: '0.3s'}}></div>
+                      <div className="w-1 h-1 bg-blue-400 rounded-full absolute top-1/2 left-0 transform -translate-y-1/2 animate-ping" style={{animationDelay: '0.6s'}}></div>
+                      <div className="w-1 h-1 bg-indigo-400 rounded-full absolute top-1/2 right-0 transform -translate-y-1/2 animate-ping" style={{animationDelay: '0.9s'}}></div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Progress Bar */}
+                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mb-3">
+                  <div 
+                    className="bg-gradient-to-r from-blue-500 to-indigo-600 h-1.5 rounded-full transition-all duration-300 ease-out"
+                    style={{ width: `${receiptProgress}%` }}
+                  ></div>
+                </div>
+                
+                {/* Processing Steps */}
+                <p className="text-sm font-medium text-blue-700 dark:text-blue-300 mb-1">
+                  {[
+                    'Uploading receipt...',
+                    'Scanning with OCR...',
+                    'Extracting data...',
+                    'Processing complete!'
+                  ][receiptProcessingStep]}
+                </p>
+                <p className="text-xs text-blue-600 dark:text-blue-400">
+                  Our AI is reading your receipt
+                </p>
+              </div>
             </div>
           )}
 
@@ -285,56 +324,124 @@ export default function AddTransactionModal({ isOpen, onClose }) {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Receipt (Optional)
                 </label>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 mb-2">
                   <input
                     type="file"
-                    accept="image/*,application/pdf"
+                    accept="image/jpeg,image/jpg,image/png,application/pdf"
                     style={{ display: 'none' }}
                     id="receipt-upload"
                     onChange={async (e) => {
                       setReceiptError('');
+                      setMessage({ type: '', text: '' });
+                      
                       const file = e.target.files[0];
                       if (!file) return;
+                      
+                      // File type validation
+                      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+                      if (!allowedTypes.includes(file.type)) {
+                        setReceiptError('Please select a JPEG, PNG, or PDF file only.');
+                        e.target.value = '';
+                        setForm(prev => ({ ...prev, receipt: null }));
+                        return;
+                      }
+                      
+                      // File size validation (1MB = 1024 * 1024 bytes)
                       if (file.size > 1 * 1024 * 1024) {
                         setReceiptError('File size exceeds 1MB. Please select a smaller file.');
                         e.target.value = '';
                         setForm(prev => ({ ...prev, receipt: null }));
                         return;
                       }
+                      
                       setIsProcessingReceipt(true);
-                      // Upload to backend immediately
+                      setReceiptProcessingStep(0);
+                      setReceiptProgress(0);
+                      
+                      // Start processing animation
+                      const processingSteps = [
+                        'Uploading receipt...',
+                        'Scanning with OCR...',
+                        'Extracting data...',
+                        'Processing complete!'
+                      ];
+                      
+                      let currentStep = 0;
+                      let progressInterval = setInterval(() => {
+                        setReceiptProgress(prev => {
+                          if (prev >= 100) {
+                            clearInterval(progressInterval);
+                            return 100;
+                          }
+                          return prev + 2;
+                        });
+                      }, 50);
+                      
+                      let stepInterval = setInterval(() => {
+                        if (currentStep < processingSteps.length - 1) {
+                          currentStep++;
+                          setReceiptProcessingStep(currentStep);
+                        } else {
+                          clearInterval(stepInterval);
+                        }
+                      }, 500);
+                      
+                      // Upload to backend
                       const formData = new FormData();
                       formData.append('receipt', file);
+                      
                       try {
                         const token = localStorage.getItem('token');
-                        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/upload`, {
-                          method: 'POST',
-                          headers: {
-                            'Authorization': `Bearer ${token}`,
-                          },
-                          body: formData,
-                        });
+                        
+                        // Add minimum delay for better UX
+                        const [response] = await Promise.all([
+                          fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/upload`, {
+                            method: 'POST',
+                            headers: {
+                              'Authorization': `Bearer ${token}`,
+                            },
+                            body: formData,
+                          }),
+                          new Promise(resolve => setTimeout(resolve, 2000)) // 2 second minimum
+                        ]);
+                        
                         const result = await response.json();
+                        
                         if (!response.ok) {
-                          setReceiptError(result.message || 'Upload failed');
-                          setForm(prev => ({ ...prev, receipt: null }));
-                          return;
+                          throw new Error(result.message || `Upload failed (${response.status})`);
                         }
+                        
+                        // Complete progress bar
+                        setReceiptProgress(100);
+                        await new Promise(resolve => setTimeout(resolve, 300));
+                        
+                        // Update form with extracted data
                         setForm(prev => ({
                           ...prev,
-                          amount: result.amount || '',
-                          item: result.item || '',
+                          amount: result.amount ? result.amount.toString() : prev.amount,
+                          item: result.item || prev.item,
                           category: result.category || prev.category,
                           receipt: file,
                         }));
-                        setMessage({ type: 'success', text: result.message || 'Receipt processed.' });
+                        
+                        setMessage({ 
+                          type: 'success', 
+                          text: result.message || 'Receipt processed successfully!' 
+                        });
+                        
                       } catch (err) {
-                        setReceiptError('Upload failed');
+                        console.error('Receipt upload error:', err);
+                        setReceiptError(err.message || 'Upload failed. Please try again.');
                         setForm(prev => ({ ...prev, receipt: null }));
+                        e.target.value = '';
                       } finally {
+                        clearInterval(progressInterval);
+                        clearInterval(stepInterval);
                         setIsProcessingReceipt(false);
+                        setReceiptProcessingStep(0);
+                        setReceiptProgress(0);
                       }
-                    }}
+                    }}}
                   />
                   <label htmlFor="receipt-upload">
                     <span
@@ -348,6 +455,12 @@ export default function AddTransactionModal({ isOpen, onClose }) {
                     {form.receipt ? 'File selected' : 'No file selected'}
                   </span>
                 </div>
+                
+                {/* File format and size info */}
+                <div className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                  Accepted: JPEG, PNG, PDF • Max size: 1MB
+                </div>
+                
                 {receiptError && (
                   <div className="mt-2 text-sm text-red-600 dark:text-red-400">
                     {receiptError}
