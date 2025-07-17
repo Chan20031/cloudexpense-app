@@ -314,7 +314,7 @@ router.post('/', async (req, res) => {
             console.log(`💰 Average cost per meal: RM${avgCostPerTransaction.toFixed(2)}`);
             
             // If user has less than 2 meals per day average, assume missing meals
-            const assumedMealsPerDay = Math.max(2, avgTransactionsPerDay); // At least 2 meals/day
+            const assumedMealsPerDay = Math.max(2, avgTransactionsPerDay); // At least 2 meals/day (biological need)
             const effectiveMealCost = avgCostPerTransaction;
             
             // Calculate remaining meals needed
@@ -351,26 +351,8 @@ router.post('/', async (req, res) => {
               console.log(`🍽️ Food (Mid month): ${remainingMealsTotal.toFixed(0)} meals planned (${weekendMealsRemaining.toFixed(0)} weekend @ RM${weekendMealCost.toFixed(2)} + ${weekdayMealsRemaining.toFixed(0)} weekday @ RM${weekdayMealCost.toFixed(2)})`);
             }
             
-            // Smart minimum check based on user's actual meal pattern
-            // Ensure at least 2 meals per day at user's average cost per meal
-            const userMinMealsPerDay = 2;
-            const userBasedMinimum = currentSpent + (remainingDays * userMinMealsPerDay * effectiveMealCost);
-            
-            if (prediction < userBasedMinimum) {
-              prediction = userBasedMinimum;
-              console.log(`🛡️ Food: Applied user-based minimum (${userMinMealsPerDay} meals/day @ RM${effectiveMealCost.toFixed(2)}/meal = RM${(userMinMealsPerDay * effectiveMealCost).toFixed(2)}/day)`);
-            }
-            
-            // Fallback: If user's cost per meal is extremely low, ensure reasonable daily food budget
-            const dailyFoodFromUserPattern = userMinMealsPerDay * effectiveMealCost;
-            if (dailyFoodFromUserPattern < 10) {
-              // If less than RM10/day for 2 meals, boost to at least RM10/day
-              const reasonableMinimum = currentSpent + (remainingDays * 10);
-              if (prediction < reasonableMinimum) {
-                prediction = reasonableMinimum;
-                console.log(`🛡️ Food: Applied reasonable minimum (RM10/day for 2 basic meals)`);
-              }
-            }
+            // No artificial minimums - respect user's actual meal patterns
+            // If user spends RM22/meal, predict based on RM22/meal lifestyle
             break;
             
           case 'transport':
@@ -386,7 +368,7 @@ router.post('/', async (req, res) => {
             
             // Assume user needs transport on most days (work/daily activities)
             const expectedTransportDays = remainingDays * 0.8; // 80% of days need transport
-            const expectedTripsPerDay = Math.max(1.5, avgTransportPerDay); // At least 1.5 trips/day (to/from work)
+            const expectedTripsPerDay = avgTransportPerDay; // Use USER'S actual transport pattern
             const totalExpectedTrips = expectedTransportDays * expectedTripsPerDay;
             
             if (monthProgress < 0.5) {
@@ -401,13 +383,8 @@ router.post('/', async (req, res) => {
               console.log(`🚌 Transport (Late): ${totalExpectedTrips.toFixed(0)} trips @ RM${budgetCostPerTrip.toFixed(2)}/trip (budget mode)`);
             }
             
-            // Minimum daily transport budget
-            const minDailyTransport = 8; // RM8/day minimum for Malaysian transport
-            const minTransportBudget = currentSpent + (remainingDays * minDailyTransport);
-            if (prediction < minTransportBudget) {
-              prediction = minTransportBudget;
-              console.log(`�️ Transport: Applied minimum (RM${minDailyTransport}/day)`);
-            }
+            // No artificial minimums - respect user's actual transport patterns
+            // If user spends less, that's their choice/location
             break;
             
           case 'shopping':
@@ -422,8 +399,8 @@ router.post('/', async (req, res) => {
             console.log(`💰 Average cost per purchase: RM${avgCostPerShopping.toFixed(2)}`);
             
             // Shopping frequency analysis - Malaysians don't shop every day
-            const expectedShoppingDays = Math.max(2, remainingDays * 0.15); // 15% of remaining days
-            const expectedPurchasesPerShoppingDay = Math.max(1, avgShoppingPerDay);
+            const expectedShoppingDays = remainingDays * 0.15; // User's pattern-based shopping
+            const expectedPurchasesPerShoppingDay = avgShoppingPerDay; // User's actual shopping frequency
             const totalExpectedPurchases = expectedShoppingDays * expectedPurchasesPerShoppingDay;
             
             if (daysPassed <= 7) {
@@ -461,13 +438,13 @@ router.post('/', async (req, res) => {
             
             if (currentSpent < (avgCostPerBill * 2)) {
               // Haven't paid many bills yet - predict based on user's bill pattern
-              const expectedRemainingBills = Math.max(2, Math.ceil(billTransactions * 1.5)); // Expect 50% more bills
+              const expectedRemainingBills = Math.ceil(billTransactions * 1.5); // User-based bill pattern
               const userBillCost = avgCostPerBill; // Use user's actual bill cost
               prediction = currentSpent + (expectedRemainingBills * userBillCost);
               console.log(`📋 Bills: Major bills pending - ${expectedRemainingBills} bills @ RM${userBillCost.toFixed(2)}/bill (user pattern)`);
             } else {
               // Some bills paid - analyze pattern
-              const expectedRemainingBills = Math.max(1, Math.ceil(billTransactions * 0.4));
+              const expectedRemainingBills = Math.ceil(billTransactions * 0.4); // User-based bill frequency
               const avgRemainingCost = avgCostPerBill * 0.8; // Smaller remaining bills
               prediction = currentSpent + (expectedRemainingBills * avgRemainingCost);
               console.log(`✅ Bills: ${expectedRemainingBills} remaining bills @ RM${avgRemainingCost.toFixed(2)}/bill`);
@@ -487,8 +464,8 @@ router.post('/', async (req, res) => {
             
             // Entertainment is typically weekend-focused for Malaysians
             const weekendsRemaining = Math.ceil(remainingDays / 7);
-            const expectedEntertainmentDays = Math.max(weekendsRemaining, remainingDays * 0.2); // 20% of days or weekends
-            const expectedActivitiesPerDay = Math.max(1, avgEntertainmentPerDay);
+            const expectedEntertainmentDays = remainingDays * 0.2; // User-based entertainment frequency
+            const expectedActivitiesPerDay = avgEntertainmentPerDay; // User's actual entertainment pattern
             const totalExpectedActivities = expectedEntertainmentDays * expectedActivitiesPerDay;
             
             if (monthProgress < 0.4) {
@@ -518,14 +495,13 @@ router.post('/', async (req, res) => {
             
             // Health expenses are usually irregular but important
             if (healthTransactions === 0) {
-              // No health expenses yet - use historical pattern or minimal buffer
-              const userHealthBuffer = Math.max(20, currentSpent * 0.1); // 10% of current spending or RM20 minimum
-              prediction = currentSpent + userHealthBuffer;
-              console.log(`🏥 Health: User-based buffer RM${userHealthBuffer.toFixed(2)} (no visits yet)`);
+              // No health expenses yet - maintain current level (user-based pattern)
+              prediction = currentSpent; // No artificial buffer
+              console.log(`🏥 Health: No visits yet - maintaining current level`);
             } else {
               // Analyze health pattern based on user's actual visits
               const monthlyHealthFreq = daysWithHealth / (daysPassed / 30); // Visits per month
-              const expectedVisitsRemaining = Math.max(0.5, monthlyHealthFreq * (remainingDays / 30));
+              const expectedVisitsRemaining = monthlyHealthFreq * (remainingDays / 30); // User's health pattern
               const userHealthCostPerVisit = avgCostPerVisit; // Use user's actual cost per visit
               
               prediction = currentSpent + (expectedVisitsRemaining * userHealthCostPerVisit);
@@ -546,26 +522,21 @@ router.post('/', async (req, res) => {
             
             // Education is typically monthly cycles - tuition, courses, books
             if (educationTransactions === 0) {
-              // No education expenses yet - might be tuition month
-              if (monthProgress < 0.3) {
-                prediction = currentSpent + 150; // Expected tuition/course payment
-                console.log(`📚 Education: Monthly tuition expected RM150`);
-              } else {
-                prediction = currentSpent + 30; // Books/materials buffer
-                console.log(`� Education: Materials buffer RM30`);
-              }
+              // No education expenses yet - maintain current level (user-based pattern)
+              prediction = currentSpent; // No artificial amounts
+              console.log(`📚 Education: No expenses yet - maintaining current level`);
             } else {
               // Analyze education pattern
               const monthlyEducationCycle = educationTransactions < 3; // Usually 1-2 big payments
               if (monthlyEducationCycle && monthProgress < 0.5) {
                 // Expecting more major payments based on user pattern
-                const expectedPayments = Math.max(1, Math.ceil(educationTransactions * 0.5));
+                const expectedPayments = Math.ceil(educationTransactions * 0.5); // User's education pattern
                 const userMajorPaymentCost = avgCostPerCourse; // Use user's actual payment size
                 prediction = currentSpent + (expectedPayments * userMajorPaymentCost);
                 console.log(`📚 Education: ${expectedPayments} major payments @ RM${userMajorPaymentCost.toFixed(2)}/payment (user pattern)`);
               } else {
                 // Smaller expenses expected based on user pattern
-                const minorExpenses = Math.max(0.5, educationTransactions * 0.3);
+                const minorExpenses = educationTransactions * 0.3; // User's education spending pattern
                 const userMinorCost = avgCostPerCourse * 0.6; // User's pattern but smaller
                 prediction = currentSpent + (minorExpenses * userMinorCost);
                 console.log(`📖 Education: ${minorExpenses.toFixed(1)} minor expenses @ RM${userMinorCost.toFixed(2)}/expense (user pattern)`);
@@ -587,8 +558,8 @@ router.post('/', async (req, res) => {
         
         // 🧠 SMART CAPS & MINIMUM LOGIC
         if (monthProgress < 0.2 && prediction < currentSpent * 3) {
-          // Early month: Allow higher predictions (your RM20 → RM600+ logic)
-          prediction = Math.max(prediction, currentSpent * 2.5);
+          // Early month: User-based scaling (respect their actual spending pattern)
+          prediction = prediction * 2.5; // Scale based on user pattern, not artificial minimum
           console.log(`🚀 Early month boost: ${category} increased to ${prediction.toFixed(2)}`);
         }
         
@@ -603,12 +574,8 @@ router.post('/', async (req, res) => {
           prediction = currentSpent * 1.2; // At least 20% more
         }
         
-        // Cap extremely high predictions
-        const maxReasonable = currentSpent * 6; // Increased max due to new multipliers
-        if (prediction > maxReasonable) {
-          prediction = maxReasonable;
-          console.log(`🛡️ Capped ${category} at ${maxReasonable.toFixed(2)} (6x current)`);
-        }
+        // No artificial caps - use USER'S actual spending patterns!
+        // If user spends RM45/meal, that's THEIR lifestyle pattern
         
         predictions[category] = Math.round(prediction * 100) / 100;
         console.log(`💡 ${category}: RM${currentSpent} → RM${predictions[category]} (${((predictions[category]/currentSpent - 1) * 100).toFixed(0)}% increase)`);
