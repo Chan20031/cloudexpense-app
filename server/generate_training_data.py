@@ -32,26 +32,17 @@ OUTPUT_FILE = 'training_data.json'
 def connect_to_db():
     """Connect to the PostgreSQL database and return connection"""
     try:
-        # Get connection info from environment variables (App Runner priority)
-        db_host = os.environ.get('DB_HOST', DB_HOST)
-        db_port = os.environ.get('DB_PORT', DB_PORT)
-        db_name = os.environ.get('DB_DATABASE', DB_NAME)
-        db_user = os.environ.get('DB_USER', DB_USER)
-        db_password = os.environ.get('DB_PASSWORD', DB_PASSWORD)
-        
-        print(f"Connecting to database: {db_name} at {db_host}:{db_port}")
+        print(f"Connecting to database: {DB_NAME} at {DB_HOST}:{DB_PORT}")
         conn = psycopg2.connect(
-            host=db_host,
-            port=db_port,
-            database=db_name,
-            user=db_user,
-            password=db_password
+            host=DB_HOST,
+            port=DB_PORT,
+            database=DB_NAME,
+            user=DB_USER,
+            password=DB_PASSWORD
         )
-        print("Database connection successful")
         return conn
     except Exception as e:
         print(f"Error connecting to database: {e}")
-        print("Available environment variables:", ", ".join([f"{k}={v[:3]}..." for k, v in os.environ.items() if 'DB_' in k]))
         sys.exit(1)
 
 def fetch_historical_data(conn, months_back=6):
@@ -131,13 +122,6 @@ def group_by_user_id(transactions):
 def generate_training_data():
     """Main function to generate training data"""
     try:
-        # Set correct database name based on environment
-        # App Runner may use different variable names
-        if os.environ.get('DB_DATABASE'):
-            DB_NAME = os.environ.get('DB_DATABASE')
-            print(f"Using DB_DATABASE environment variable: {DB_NAME}")
-        
-        # Try using the AWS App Runner's DB connection params
         conn = connect_to_db()
         
         # Fetch all historical data
@@ -157,30 +141,19 @@ def generate_training_data():
             }
             global_training_data.append(clean_transaction)
             
-        if conn:
-            conn.close()
-            
-        print(f"Successfully processed {len(global_training_data)} training records")
-            
         # Write global training data to file
-        try:
-            with open(OUTPUT_FILE, 'w') as f:
-                json.dump(global_training_data, f, indent=2)
-                
-            print(f"Generated training data with {len(global_training_data)} records")
-            print(f"Training data written to {OUTPUT_FILE}")
+        with open(OUTPUT_FILE, 'w') as f:
+            json.dump(global_training_data, f, indent=2)
             
-            # TODO: In the future, create user-specific training files
-            # for user_id, transactions in user_transactions.items():
-            #     with open(f'training_data_{user_id}.json', 'w') as f:
-            #         json.dump(transactions, f, indent=2)
-        except Exception as file_error:
-            print(f"Warning: Could not write training data file: {file_error}")
-            # Create directory if it doesn't exist
-            os.makedirs(os.path.dirname(os.path.abspath(OUTPUT_FILE)), exist_ok=True)
-            # Try again with minimal permissions needed
-            with open(OUTPUT_FILE, 'w') as f:
-                json.dump([], f)
+        print(f"Generated training data with {len(global_training_data)} records")
+        print(f"Training data written to {OUTPUT_FILE}")
+        
+        # TODO: In the future, create user-specific training files
+        # for user_id, transactions in user_transactions.items():
+        #     with open(f'training_data_{user_id}.json', 'w') as f:
+        #         json.dump(transactions, f, indent=2)
+        
+        conn.close()
         return True
         
     except Exception as e:
