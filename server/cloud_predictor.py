@@ -1,15 +1,25 @@
 import sys
 import json
-import pandas as pd
-from prophet import Prophet
 import warnings
 from datetime import datetime, timedelta
 import os
+
 warnings.filterwarnings('ignore')
 
 # Ensure the Prophet algorithm uses optimal numerical libraries if available
 os.environ['OPENBLAS_NUM_THREADS'] = '4'  # Optimize numerical performance
 os.environ['MKL_NUM_THREADS'] = '4'       # Optimize numerical performance
+
+# Try importing Prophet, but fail gracefully if not available
+PROPHET_AVAILABLE = False
+try:
+    import pandas as pd
+    from prophet import Prophet
+    PROPHET_AVAILABLE = True
+    print("Prophet library loaded successfully", file=sys.stderr)
+except ImportError as e:
+    print(f"Warning: Could not import Prophet: {e}", file=sys.stderr)
+    print("Will use mathematical fallback for predictions", file=sys.stderr)
 
 def load_training_data():
     """Load training data for AI learning"""
@@ -41,7 +51,7 @@ def predict_category(current_data, all_historical_data, category, remaining_days
     print(f"{category}: Current total={current_total:.2f}, Remaining days={remaining_days}", file=sys.stderr)
     
     # Now prioritize using AI prediction whenever possible
-    if len(all_historical_data) >= 3:  # Even more aggressive AI usage, only need 3 data points
+    if PROPHET_AVAILABLE and len(all_historical_data) >= 3:  # Check if Prophet is available
         try:
             print(f"{category}: Using Prophet AI with {len(all_historical_data)} data points", file=sys.stderr)
             
