@@ -303,115 +303,273 @@ router.post('/', async (req, res) => {
         // 🇲🇾 MALAYSIAN SPENDING INTELLIGENCE
         switch(category.toLowerCase()) {
           case 'food':
-            // 🍽️ REALISTIC MEAL ESTIMATION - At least 2 meals per day
-            const avgMealCost = currentSpent / (daysPassed * 2); // Assume 2 meals per day minimum
-            const minMealsRemaining = remainingDays * 2; // At least 2 meals per day
+            // 🍽️ SMART MEAL ANALYSIS - Count actual transactions per day
+            const uniqueDates = [...new Set(categoryData.map(item => item.date))];
+            const daysWithFoodExpenses = uniqueDates.length;
+            const totalTransactions = categoryData.length;
+            const avgTransactionsPerDay = totalTransactions / daysWithFoodExpenses;
+            const avgCostPerTransaction = currentSpent / totalTransactions;
             
-            // Calculate weekend vs weekday meals
+            console.log(`🍽️ Food Analysis: ${totalTransactions} transactions across ${daysWithFoodExpenses} days (${avgTransactionsPerDay.toFixed(1)} meals/day avg)`);
+            console.log(`💰 Average cost per meal: RM${avgCostPerTransaction.toFixed(2)}`);
+            
+            // If user has less than 2 meals per day average, assume missing meals
+            const assumedMealsPerDay = Math.max(2, avgTransactionsPerDay); // At least 2 meals/day
+            const effectiveMealCost = avgCostPerTransaction;
+            
+            // Calculate remaining meals needed
+            const remainingMealsTotal = remainingDays * assumedMealsPerDay;
+            
+            // Weekend vs weekday analysis
             const weekendDaysLeft = Math.floor(remainingDays / 7) * 2 + (remainingDays % 7 > 0 ? Math.min(remainingDays % 7, 2) : 0);
             const weekdayDaysLeft = remainingDays - weekendDaysLeft;
             
-            // Malaysian meal pricing: Weekend meals cost more (restaurant vs mamak)
-            const weekendMealCost = avgMealCost * 1.5; // Restaurant/family dinner style
-            const weekdayMealCost = avgMealCost * 1.0; // Normal mamak/kopitiam style
+            const weekendMealsRemaining = weekendDaysLeft * assumedMealsPerDay;
+            const weekdayMealsRemaining = weekdayDaysLeft * assumedMealsPerDay;
             
-            const weekendMealsRemaining = weekendDaysLeft * 2;
-            const weekdayMealsRemaining = weekdayDaysLeft * 2;
+            // Malaysian meal pricing: Weekend meals cost more
+            const weekendMealCost = effectiveMealCost * 1.4; // Weekend restaurant/family style
+            const weekdayMealCost = effectiveMealCost * 1.0; // Normal mamak/kopitiam
             
             if (monthProgress < 0.3) {
               // Early month: Can afford variety (restaurants, delivery)
               const estimatedWeekendCost = weekendMealsRemaining * weekendMealCost;
-              const estimatedWeekdayCost = weekdayMealsRemaining * weekdayMealCost * 1.1; // Slightly premium
+              const estimatedWeekdayCost = weekdayMealsRemaining * weekdayMealCost * 1.2; // Premium choices
               prediction = currentSpent + estimatedWeekendCost + estimatedWeekdayCost;
-              console.log(`🍽️ Food (Early month): ${minMealsRemaining} meals estimated (${weekendMealsRemaining} weekend + ${weekdayMealsRemaining} weekday)`);
+              console.log(`🍽️ Food (Early month): ${remainingMealsTotal.toFixed(0)} meals @ RM${effectiveMealCost.toFixed(2)}/meal (${weekendMealsRemaining.toFixed(0)} weekend + ${weekdayMealsRemaining.toFixed(0)} weekday)`);
             } else if (monthProgress > 0.7) {
-              // Late month: More budget conscious (mamak, kopitiam, home cooking)
-              const budgetWeekendCost = weekendMealsRemaining * avgMealCost * 1.2; // Slightly more than weekday
-              const budgetWeekdayCost = weekdayMealsRemaining * avgMealCost * 0.8; // Budget meals
+              // Late month: Budget conscious (mamak, home cooking)
+              const budgetWeekendCost = weekendMealsRemaining * effectiveMealCost * 1.1;
+              const budgetWeekdayCost = weekdayMealsRemaining * effectiveMealCost * 0.9;
               prediction = currentSpent + budgetWeekendCost + budgetWeekdayCost;
-              console.log(`🍜 Food (Late month): Budget mode - ${minMealsRemaining} meals (mamak/kopitiam style)`);
+              console.log(`🍜 Food (Late month): Budget mode - ${remainingMealsTotal.toFixed(0)} meals (mamak/home cooking)`);
             } else {
-              // Mid month: Normal Malaysian eating patterns
+              // Mid month: Normal patterns
               const normalWeekendCost = weekendMealsRemaining * weekendMealCost;
               const normalWeekdayCost = weekdayMealsRemaining * weekdayMealCost;
               prediction = currentSpent + normalWeekendCost + normalWeekdayCost;
-              console.log(`🍽️ Food (Mid month): Normal eating - ${minMealsRemaining} meals planned`);
+              console.log(`🍽️ Food (Mid month): ${remainingMealsTotal.toFixed(0)} meals planned (${weekendMealsRemaining.toFixed(0)} weekend @ RM${weekendMealCost.toFixed(2)} + ${weekdayMealsRemaining.toFixed(0)} weekday @ RM${weekdayMealCost.toFixed(2)})`);
             }
             
-            // Safety check: Ensure minimum reasonable food budget
-            const minDailyFood = 15; // Minimum RM15/day for basic meals in Malaysia
-            const minFoodBudget = currentSpent + (remainingDays * minDailyFood);
-            if (prediction < minFoodBudget) {
-              prediction = minFoodBudget;
-              console.log(`🛡️ Food: Applied minimum daily budget (RM${minDailyFood}/day)`);
+            // Smart minimum check based on user's actual meal pattern
+            // Ensure at least 2 meals per day at user's average cost per meal
+            const userMinMealsPerDay = 2;
+            const userBasedMinimum = currentSpent + (remainingDays * userMinMealsPerDay * effectiveMealCost);
+            
+            if (prediction < userBasedMinimum) {
+              prediction = userBasedMinimum;
+              console.log(`🛡️ Food: Applied user-based minimum (${userMinMealsPerDay} meals/day @ RM${effectiveMealCost.toFixed(2)}/meal = RM${(userMinMealsPerDay * effectiveMealCost).toFixed(2)}/day)`);
+            }
+            
+            // Fallback: If user's cost per meal is extremely low, ensure reasonable daily food budget
+            const dailyFoodFromUserPattern = userMinMealsPerDay * effectiveMealCost;
+            if (dailyFoodFromUserPattern < 10) {
+              // If less than RM10/day for 2 meals, boost to at least RM10/day
+              const reasonableMinimum = currentSpent + (remainingDays * 10);
+              if (prediction < reasonableMinimum) {
+                prediction = reasonableMinimum;
+                console.log(`🛡️ Food: Applied reasonable minimum (RM10/day for 2 basic meals)`);
+              }
             }
             break;
             
           case 'transport':
-            // Malaysian transport: Petrol, Touch 'n Go, Grab
+            // 🚗 SMART TRANSPORT ANALYSIS - Based on actual usage patterns
+            const uniqueTransportDates = [...new Set(categoryData.map(item => item.date))];
+            const daysWithTransport = uniqueTransportDates.length;
+            const transportTransactions = categoryData.length;
+            const avgTransportPerDay = transportTransactions / daysWithTransport;
+            const avgCostPerTrip = currentSpent / transportTransactions;
+            
+            console.log(`🚗 Transport Analysis: ${transportTransactions} trips across ${daysWithTransport} days (${avgTransportPerDay.toFixed(1)} trips/day avg)`);
+            console.log(`💰 Average cost per trip: RM${avgCostPerTrip.toFixed(2)}`);
+            
+            // Assume user needs transport on most days (work/daily activities)
+            const expectedTransportDays = remainingDays * 0.8; // 80% of days need transport
+            const expectedTripsPerDay = Math.max(1.5, avgTransportPerDay); // At least 1.5 trips/day (to/from work)
+            const totalExpectedTrips = expectedTransportDays * expectedTripsPerDay;
+            
             if (monthProgress < 0.5) {
-              // Early month: Full tank, more travel
-              prediction = currentSpent + (dailyAverage * remainingDays * 1.2);
-              console.log(`🚗 Transport (Early): Full tank mode`);
+              // Early month: Full tank, more Grab/premium transport
+              const premiumCostPerTrip = avgCostPerTrip * 1.3;
+              prediction = currentSpent + (totalExpectedTrips * premiumCostPerTrip);
+              console.log(`🚗 Transport (Early): ${totalExpectedTrips.toFixed(0)} trips @ RM${premiumCostPerTrip.toFixed(2)}/trip (premium mode)`);
             } else {
-              // Late month: More careful, less Grab
-              prediction = currentSpent + (dailyAverage * remainingDays * 0.8);
-              console.log(`🚌 Transport (Late): Public transport mode`);
+              // Late month: More budget conscious (public transport, less Grab)
+              const budgetCostPerTrip = avgCostPerTrip * 0.9;
+              prediction = currentSpent + (totalExpectedTrips * budgetCostPerTrip);
+              console.log(`🚌 Transport (Late): ${totalExpectedTrips.toFixed(0)} trips @ RM${budgetCostPerTrip.toFixed(2)}/trip (budget mode)`);
+            }
+            
+            // Minimum daily transport budget
+            const minDailyTransport = 8; // RM8/day minimum for Malaysian transport
+            const minTransportBudget = currentSpent + (remainingDays * minDailyTransport);
+            if (prediction < minTransportBudget) {
+              prediction = minTransportBudget;
+              console.log(`�️ Transport: Applied minimum (RM${minDailyTransport}/day)`);
             }
             break;
             
           case 'shopping':
-            // Malaysian shopping patterns: Payday splurge, then careful
+            // 🛍️ SMART SHOPPING ANALYSIS - Based on actual shopping patterns
+            const uniqueShoppingDates = [...new Set(categoryData.map(item => item.date))];
+            const daysWithShopping = uniqueShoppingDates.length;
+            const shoppingTransactions = categoryData.length;
+            const avgShoppingPerDay = shoppingTransactions / daysWithShopping;
+            const avgCostPerShopping = currentSpent / shoppingTransactions;
+            
+            console.log(`🛍️ Shopping Analysis: ${shoppingTransactions} purchases across ${daysWithShopping} days`);
+            console.log(`💰 Average cost per purchase: RM${avgCostPerShopping.toFixed(2)}`);
+            
+            // Shopping frequency analysis - Malaysians don't shop every day
+            const expectedShoppingDays = Math.max(2, remainingDays * 0.15); // 15% of remaining days
+            const expectedPurchasesPerShoppingDay = Math.max(1, avgShoppingPerDay);
+            const totalExpectedPurchases = expectedShoppingDays * expectedPurchasesPerShoppingDay;
+            
             if (daysPassed <= 7) {
               // First week: Payday shopping spree
-              prediction = currentSpent + (dailyAverage * remainingDays * 0.6);
-              console.log(`🛍️ Shopping (Payday week): Early splurge detected`);
+              const paydayCostPerPurchase = avgCostPerShopping * 1.5;
+              prediction = currentSpent + (totalExpectedPurchases * paydayCostPerPurchase * 0.7); // But less frequent
+              console.log(`🛍️ Shopping (Payday week): ${totalExpectedPurchases.toFixed(0)} purchases @ RM${paydayCostPerPurchase.toFixed(2)}/purchase`);
             } else if (monthProgress > 0.6) {
-              // Late month: Very conservative
-              prediction = currentSpent + (dailyAverage * remainingDays * 0.3);
-              console.log(`💰 Shopping (Late): Wallet protection mode`);
+              // Late month: Very conservative, only essentials
+              const essentialCostPerPurchase = avgCostPerShopping * 0.6;
+              const essentialPurchases = totalExpectedPurchases * 0.5; // Half the frequency
+              prediction = currentSpent + (essentialPurchases * essentialCostPerPurchase);
+              console.log(`💰 Shopping (Late): ${essentialPurchases.toFixed(0)} essential purchases @ RM${essentialCostPerPurchase.toFixed(2)}/purchase`);
             } else {
-              prediction = basicProjection * 0.8;
+              // Normal shopping pattern
+              prediction = currentSpent + (totalExpectedPurchases * avgCostPerShopping);
+              console.log(`🛒 Shopping (Normal): ${totalExpectedPurchases.toFixed(0)} purchases @ RM${avgCostPerShopping.toFixed(2)}/purchase`);
             }
             break;
             
           case 'bills':
-            // Malaysian bills: Predictable monthly expenses
-            if (currentSpent < 50) {
-              // Haven't paid major bills yet
-              prediction = Math.max(basicProjection, 200); // Minimum RM200 for utilities
-              console.log(`📋 Bills: Major bills pending`);
+            // 📊 SMART BILLS ANALYSIS
+            const uniqueBillDates = [...new Set(categoryData.map(item => item.date))];
+            const daysWithBills = uniqueBillDates.length;
+            const billTransactions = categoryData.length;
+            const avgBillsPerDay = billTransactions / daysWithBills;
+            const avgCostPerBill = currentSpent / billTransactions;
+            
+            console.log(`📊 Bills Analysis: ${billTransactions} bills across ${daysWithBills} days`);
+            console.log(`💰 Average cost per bill: RM${avgCostPerBill.toFixed(2)}`);
+            
+            // Bills are usually monthly cycles - utilities, phone, internet, etc.
+            const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
+            const monthlyBillCycle = daysInMonth > 25; // Determine if monthly bills expected
+            
+            if (currentSpent < (avgCostPerBill * 2)) {
+              // Haven't paid many bills yet - predict based on user's bill pattern
+              const expectedRemainingBills = Math.max(2, Math.ceil(billTransactions * 1.5)); // Expect 50% more bills
+              const userBillCost = avgCostPerBill; // Use user's actual bill cost
+              prediction = currentSpent + (expectedRemainingBills * userBillCost);
+              console.log(`📋 Bills: Major bills pending - ${expectedRemainingBills} bills @ RM${userBillCost.toFixed(2)}/bill (user pattern)`);
             } else {
-              // Bills mostly paid
-              prediction = currentSpent + (dailyAverage * remainingDays * 0.5);
-              console.log(`✅ Bills: Most bills paid`);
+              // Some bills paid - analyze pattern
+              const expectedRemainingBills = Math.max(1, Math.ceil(billTransactions * 0.4));
+              const avgRemainingCost = avgCostPerBill * 0.8; // Smaller remaining bills
+              prediction = currentSpent + (expectedRemainingBills * avgRemainingCost);
+              console.log(`✅ Bills: ${expectedRemainingBills} remaining bills @ RM${avgRemainingCost.toFixed(2)}/bill`);
             }
             break;
             
           case 'entertainment':
-            // Malaysian entertainment: Movies, karaoke, lepak
+            // 🎬 SMART ENTERTAINMENT ANALYSIS 
+            const uniqueEntertainmentDates = [...new Set(categoryData.map(item => item.date))];
+            const daysWithEntertainment = uniqueEntertainmentDates.length;
+            const entertainmentTransactions = categoryData.length;
+            const avgEntertainmentPerDay = entertainmentTransactions / daysWithEntertainment;
+            const avgCostPerActivity = currentSpent / entertainmentTransactions;
+            
+            console.log(`🎬 Entertainment Analysis: ${entertainmentTransactions} activities across ${daysWithEntertainment} days`);
+            console.log(`💰 Average cost per activity: RM${avgCostPerActivity.toFixed(2)}`);
+            
+            // Entertainment is typically weekend-focused for Malaysians
+            const weekendsRemaining = Math.ceil(remainingDays / 7);
+            const expectedEntertainmentDays = Math.max(weekendsRemaining, remainingDays * 0.2); // 20% of days or weekends
+            const expectedActivitiesPerDay = Math.max(1, avgEntertainmentPerDay);
+            const totalExpectedActivities = expectedEntertainmentDays * expectedActivitiesPerDay;
+            
             if (monthProgress < 0.4) {
-              prediction = basicProjection * 1.3; // Early month entertainment
-              console.log(`🎬 Entertainment: Cinema & karaoke season`);
+              // Early month: Cinema, karaoke, dining out
+              const premiumCostPerActivity = avgCostPerActivity * 1.4;
+              prediction = currentSpent + (totalExpectedActivities * premiumCostPerActivity);
+              console.log(`🎬 Entertainment (Early): ${totalExpectedActivities.toFixed(0)} activities @ RM${premiumCostPerActivity.toFixed(2)}/activity (cinema & karaoke)`);
             } else {
-              prediction = currentSpent + (dailyAverage * remainingDays * 0.7);
-              console.log(`🏠 Entertainment: Netflix & chill mode`);
+              // Late month: Netflix, home entertainment, cheaper options
+              const budgetCostPerActivity = avgCostPerActivity * 0.8;
+              const budgetActivities = totalExpectedActivities * 0.7; // Less frequent
+              prediction = currentSpent + (budgetActivities * budgetCostPerActivity);
+              console.log(`🏠 Entertainment (Late): ${budgetActivities.toFixed(0)} activities @ RM${budgetCostPerActivity.toFixed(2)}/activity (Netflix & chill)`);
             }
             break;
             
           case 'health':
-            // Malaysian healthcare: Clinic visits, pharmacy
-            prediction = Math.max(basicProjection, currentSpent + 30); // Minimum RM30 buffer
-            console.log(`🏥 Health: Malaysian healthcare buffer`);
+            // 🏥 SMART HEALTH ANALYSIS
+            const uniqueHealthDates = [...new Set(categoryData.map(item => item.date))];
+            const daysWithHealth = uniqueHealthDates.length;
+            const healthTransactions = categoryData.length;
+            const avgHealthPerDay = healthTransactions / daysWithHealth;
+            const avgCostPerVisit = currentSpent / healthTransactions;
+            
+            console.log(`🏥 Health Analysis: ${healthTransactions} visits across ${daysWithHealth} days`);
+            console.log(`💰 Average cost per visit: RM${avgCostPerVisit.toFixed(2)}`);
+            
+            // Health expenses are usually irregular but important
+            if (healthTransactions === 0) {
+              // No health expenses yet - use historical pattern or minimal buffer
+              const userHealthBuffer = Math.max(20, currentSpent * 0.1); // 10% of current spending or RM20 minimum
+              prediction = currentSpent + userHealthBuffer;
+              console.log(`🏥 Health: User-based buffer RM${userHealthBuffer.toFixed(2)} (no visits yet)`);
+            } else {
+              // Analyze health pattern based on user's actual visits
+              const monthlyHealthFreq = daysWithHealth / (daysPassed / 30); // Visits per month
+              const expectedVisitsRemaining = Math.max(0.5, monthlyHealthFreq * (remainingDays / 30));
+              const userHealthCostPerVisit = avgCostPerVisit; // Use user's actual cost per visit
+              
+              prediction = currentSpent + (expectedVisitsRemaining * userHealthCostPerVisit);
+              console.log(`🏥 Health: ${expectedVisitsRemaining.toFixed(1)} visits @ RM${userHealthCostPerVisit.toFixed(2)}/visit (user pattern)`);
+            }
             break;
             
           case 'education':
-            // Malaysian education: Tuition, courses
-            if (monthProgress < 0.3) {
-              prediction = Math.max(basicProjection, currentSpent + 100);
-              console.log(`📚 Education: Monthly tuition cycle`);
+            // 📚 SMART EDUCATION ANALYSIS
+            const uniqueEducationDates = [...new Set(categoryData.map(item => item.date))];
+            const daysWithEducation = uniqueEducationDates.length;
+            const educationTransactions = categoryData.length;
+            const avgEducationPerDay = educationTransactions / daysWithEducation;
+            const avgCostPerCourse = currentSpent / educationTransactions;
+            
+            console.log(`📚 Education Analysis: ${educationTransactions} payments across ${daysWithEducation} days`);
+            console.log(`💰 Average cost per payment: RM${avgCostPerCourse.toFixed(2)}`);
+            
+            // Education is typically monthly cycles - tuition, courses, books
+            if (educationTransactions === 0) {
+              // No education expenses yet - might be tuition month
+              if (monthProgress < 0.3) {
+                prediction = currentSpent + 150; // Expected tuition/course payment
+                console.log(`📚 Education: Monthly tuition expected RM150`);
+              } else {
+                prediction = currentSpent + 30; // Books/materials buffer
+                console.log(`� Education: Materials buffer RM30`);
+              }
             } else {
-              prediction = basicProjection;
+              // Analyze education pattern
+              const monthlyEducationCycle = educationTransactions < 3; // Usually 1-2 big payments
+              if (monthlyEducationCycle && monthProgress < 0.5) {
+                // Expecting more major payments based on user pattern
+                const expectedPayments = Math.max(1, Math.ceil(educationTransactions * 0.5));
+                const userMajorPaymentCost = avgCostPerCourse; // Use user's actual payment size
+                prediction = currentSpent + (expectedPayments * userMajorPaymentCost);
+                console.log(`📚 Education: ${expectedPayments} major payments @ RM${userMajorPaymentCost.toFixed(2)}/payment (user pattern)`);
+              } else {
+                // Smaller expenses expected based on user pattern
+                const minorExpenses = Math.max(0.5, educationTransactions * 0.3);
+                const userMinorCost = avgCostPerCourse * 0.6; // User's pattern but smaller
+                prediction = currentSpent + (minorExpenses * userMinorCost);
+                console.log(`📖 Education: ${minorExpenses.toFixed(1)} minor expenses @ RM${userMinorCost.toFixed(2)}/expense (user pattern)`);
+              }
             }
             break;
             
