@@ -35,17 +35,51 @@ function logMessage(message) {
 function generateTrainingData() {
   logMessage('Starting training data generation process...');
   
-  const pythonProcess = spawn(PYTHON_COMMAND, [SCRIPT_PATH]);
+  // Check if Python is installed
+  try {
+    const checkPythonProcess = spawn(PYTHON_COMMAND, ['--version']);
+    checkPythonProcess.on('error', (err) => {
+      logMessage(`Error checking Python: ${err.message}`);
+      createEmptyTrainingData();
+      return;
+    });
+    
+    checkPythonProcess.on('close', (code) => {
+      if (code !== 0) {
+        logMessage(`Python check failed with code ${code}`);
+        createEmptyTrainingData();
+        return;
+      }
+      
+      // Python is available, run the generator
+      runPythonGenerator();
+    });
+  } catch (err) {
+    logMessage(`Exception checking Python: ${err.message}`);
+    createEmptyTrainingData();
+  }
+}
+
+// Run the actual Python generator
+function runPythonGenerator() {
+  // Add database environment variables from process.env
+  const env = { ...process.env };
+  
+  const pythonProcess = spawn(PYTHON_COMMAND, [SCRIPT_PATH], { env });
   
   let output = '';
   let errorOutput = '';
   
   pythonProcess.stdout.on('data', (data) => {
-    output += data.toString();
+    const chunk = data.toString();
+    output += chunk;
+    logMessage(`Python output: ${chunk.trim()}`);
   });
   
   pythonProcess.stderr.on('data', (data) => {
-    errorOutput += data.toString();
+    const chunk = data.toString();
+    errorOutput += chunk;
+    logMessage(`Python debug: ${chunk.trim()}`);
   });
   
   pythonProcess.on('close', (code) => {
@@ -61,12 +95,31 @@ function generateTrainingData() {
         logMessage(`Generated ${trainingData.length} training records`);
       } catch (error) {
         logMessage(`Error verifying training data: ${error.message}`);
+        createEmptyTrainingData();
       }
     } else {
       logMessage(`Training data generation failed with code ${code}`);
       logMessage(`Error output: ${errorOutput}`);
+      createEmptyTrainingData();
     }
   });
+  
+  pythonProcess.on('error', (err) => {
+    logMessage(`Failed to start Python process: ${err.message}`);
+    createEmptyTrainingData();
+  });
+}
+
+// Create a basic empty training file as a last resort
+function createEmptyTrainingData() {
+  logMessage('Creating empty training data as fallback');
+  try {
+    const emptyData = [];
+    fs.writeFileSync(TRAINING_DATA_PATH, JSON.stringify(emptyData));
+    logMessage('Empty training data file created');
+  } catch (err) {
+    logMessage(`Failed to create empty training data: ${err.message}`);
+  }
 }
 
 // Run immediately on startup

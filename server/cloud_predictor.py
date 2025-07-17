@@ -1,25 +1,50 @@
 import sys
 import json
+import os
 import pandas as pd
 from prophet import Prophet
 import warnings
 from datetime import datetime, timedelta
-import os
 warnings.filterwarnings('ignore')
-
-# Ensure the Prophet algorithm uses optimal numerical libraries if available
-os.environ['OPENBLAS_NUM_THREADS'] = '4'  # Optimize numerical performance
-os.environ['MKL_NUM_THREADS'] = '4'       # Optimize numerical performance
 
 def load_training_data():
     """Load training data for AI learning"""
     try:
+        print(f"🔍 Attempting to load training_data.json from: {os.getcwd()}", file=sys.stderr)
+        
+        # Check if file exists
+        if not os.path.exists('training_data.json'):
+            print("❌ training_data.json does not exist in current directory", file=sys.stderr)
+            return []
+            
+        print("✅ training_data.json file exists", file=sys.stderr)
+        
+        # Check file size
+        file_size = os.path.getsize('training_data.json')
+        print(f"📊 training_data.json file size: {file_size} bytes", file=sys.stderr)
+        
         with open('training_data.json', 'r') as f:
             data = json.load(f)
-            print(f"Loaded {len(data)} training records for AI", file=sys.stderr)
+            print(f"✅ Successfully loaded {len(data)} training records for AI", file=sys.stderr)
+            
+            # Show sample of data structure
+            if data:
+                sample = data[0]
+                print(f"📋 Sample training record: {sample}", file=sys.stderr)
+                
+                # Check categories in training data
+                categories = set(record.get('category', 'unknown') for record in data)
+                print(f"📂 Categories in training data: {sorted(categories)}", file=sys.stderr)
+            
             return data
-    except:
-        print("No training data found - using current data only", file=sys.stderr)
+    except FileNotFoundError:
+        print("⚠️ training_data.json not found - using current data only", file=sys.stderr)
+        return []
+    except json.JSONDecodeError as e:
+        print(f"❌ JSON decode error in training_data.json: {e}", file=sys.stderr)
+        return []
+    except Exception as e:
+        print(f"⚠️ Error loading training data: {e} - using current data only", file=sys.stderr)
         return []
 
 def parse_date(date_str):
@@ -31,7 +56,7 @@ def parse_date(date_str):
         # Simple YYYY-MM-DD format
         return datetime.strptime(str(date_str), '%Y-%m-%d')
 
-def predict_category(current_data, all_historical_data, category, remaining_days):
+def predict_category(current_data, all_historical_data, category, remaining_days, reference_date=None):
     """Smart Prophet AI prediction with realistic constraints"""
     current_total = sum(expense['amount'] for expense in current_data)
     
@@ -40,10 +65,18 @@ def predict_category(current_data, all_historical_data, category, remaining_days
     
     print(f"{category}: Current total={current_total:.2f}, Remaining days={remaining_days}", file=sys.stderr)
     
-    # Now prioritize using AI prediction whenever possible
-    if len(all_historical_data) >= 3:  # Even more aggressive AI usage, only need 3 data points
+    # Use Prophet AI if we have at least a minimal amount of data
+    if len(all_historical_data) >= 3:  # Lowered to 3 to maximize AI usage
         try:
-            print(f"{category}: Using Prophet AI with {len(all_historical_data)} data points", file=sys.stderr)
+            print(f"{category}: ⚡ Attempting Prophet AI with {len(all_historical_data)} data points", file=sys.stderr)
+            
+            # Check if we have sufficient temporal diversity for Prophet
+            unique_dates = set(parse_date(record['date']).date() for record in all_historical_data)
+            if len(unique_dates) < 2:
+                print(f"{category}: ❌ Only {len(unique_dates)} unique dates - Prophet needs temporal diversity, using fallback", file=sys.stderr)
+                raise ValueError("Insufficient temporal diversity for Prophet AI")
+            
+            print(f"{category}: ✅ Using Prophet AI with {len(all_historical_data)} data points across {len(unique_dates)} dates", file=sys.stderr)
             
             # Prepare data for Prophet
             prophet_data = []
@@ -86,11 +119,11 @@ def predict_category(current_data, all_historical_data, category, remaining_days
             # Train the model
             model.fit(df)
             
-            # Create future dates for remaining days
+            # Create future dates for remaining days from reference date
             future_dates = []
-            today = datetime.now()
+            start_date = reference_date if reference_date else datetime.now()
             for i in range(1, remaining_days + 1):
-                future_dates.append(today + timedelta(days=i))
+                future_dates.append(start_date + timedelta(days=i))
             
             future_df = pd.DataFrame({'ds': future_dates})
             forecast = model.predict(future_df)
@@ -98,119 +131,113 @@ def predict_category(current_data, all_historical_data, category, remaining_days
             # Sum predicted values for remaining days
             predicted_additional = max(0, forecast['yhat'].sum())
             
-            # REALISTIC CONSTRAINTS - This is the key!
-            
-            # Calculate current daily average
-            unique_dates = set(parse_date(expense['date']).day for expense in current_data)
-            days_with_spending = len(unique_dates)
-            current_daily_avg = current_total / max(days_with_spending, 1)
-            
-            # Calculate expected spending frequency
-            days_passed = max(unique_dates) if unique_dates else 1
-            spending_frequency = days_with_spending / days_passed
-            
-            # Simple projection for comparison
-            simple_projection = current_daily_avg * remaining_days * spending_frequency
-            
-            # Apply AI-powered category-specific intelligence
-            
-            # Calculate spending pattern consistency
-            dates_with_expenses = set(parse_date(expense['date']).day for expense in current_data)
-            date_range = max(dates_with_expenses) - min(dates_with_expenses) if dates_with_expenses else 1
-            expense_count = len(current_data)
-            
-            # AI pattern recognition: Higher consistency = more predictable future
-            consistency_score = 1.0 - (len(dates_with_expenses) / max(date_range, 1)) + (0.1 * min(expense_count / 10, 1.0))
-            
-            # Dynamic multipliers based on spending patterns
-            if category.lower() in ['bills']:
-                # Bills: Check if typical end-of-month pattern
-                late_month_expenses = sum(1 for exp in current_data if parse_date(exp['date']).day > 20)
-                is_late_month_pattern = late_month_expenses > len(current_data) * 0.7
-                
-                if is_late_month_pattern and remaining_days < 10:
-                    # End of month with typical bill pattern
-                    max_multiplier = 1.2
-                    predicted_additional = min(predicted_additional, current_total * 0.3)
-                else:
-                    max_multiplier = 1.5
-                    predicted_additional = min(predicted_additional, current_total * 0.5 * (1 + consistency_score))
-                    
-            elif category.lower() in ['education']:
-                # Education: Check for large irregular payments
-                has_large_payments = any(float(exp['amount']) > current_total * 0.5 for exp in current_data)
-                
-                if has_large_payments:
-                    # One large payment likely means another won't happen
-                    max_multiplier = 1.3
-                    predicted_additional = min(predicted_additional, current_total * 0.4)
-                else:
-                    max_multiplier = 2.0
-                    predicted_additional = min(predicted_additional, current_total * (0.8 + consistency_score))
-                    
-            elif category.lower() in ['food', 'transport']:
-                # Essential daily categories: Strong day-of-week patterns
-                weekday_pattern = {}
-                for exp in all_historical_data:
-                    day = parse_date(exp['date']).weekday()
-                    if day not in weekday_pattern:
-                        weekday_pattern[day] = 0
-                    weekday_pattern[day] += 1
-                    
-                # Check if weekday pattern exists
-                has_pattern = max(weekday_pattern.values()) > sum(weekday_pattern.values()) * 0.3
-                
-                if has_pattern:
-                    # Apply AI-detected weekday pattern
-                    max_multiplier = 2.2
-                    pattern_factor = 1.2
-                else:
-                    # More consistent daily spending
-                    max_multiplier = 2.5
-                    pattern_factor = 1.3
-                    
-                predicted_additional = min(predicted_additional, simple_projection * pattern_factor)
-                
-            elif category.lower() in ['shopping']:
-                # Shopping: Often clustered on weekends or paydays
-                # Check for weekend pattern
-                weekend_expenses = sum(1 for exp in all_historical_data 
-                                     if parse_date(exp['date']).weekday() >= 5)
-                is_weekend_heavy = weekend_expenses > len(all_historical_data) * 0.4
-                
-                if is_weekend_heavy and remaining_days >= 5:
-                    # Account for upcoming weekend(s)
-                    remaining_weekends = remaining_days // 7 + (1 if remaining_days % 7 >= 6 - datetime.now().weekday() else 0)
-                    max_multiplier = 2.0 + (0.2 * remaining_weekends)
-                else:
-                    max_multiplier = 2.0
-                    
-                predicted_additional = min(predicted_additional, simple_projection * (1.2 + consistency_score))
-                
-            else:
-                # Others - apply smart intelligence based on detected patterns
-                avg_gap = date_range / max(len(dates_with_expenses) - 1, 1) if len(dates_with_expenses) > 1 else 7
-                regularity_factor = 1.0 - min(avg_gap / 15, 0.5)  # Lower gaps = more regular spending
-                
-                max_multiplier = 2.0 * (1 + regularity_factor * 0.5)
-                predicted_additional = min(predicted_additional, simple_projection * (1.0 + regularity_factor))
-            
-            # Final sanity check - never exceed reasonable bounds
-            max_reasonable = current_total * max_multiplier
+            # SMART AI APPROACH - Consider spending velocity and month context
             predicted_total = current_total + predicted_additional
             
-            if predicted_total > max_reasonable:
-                predicted_total = max_reasonable
-                print(f"{category}: AI prediction capped at reasonable limit", file=sys.stderr)
+            # Calculate spending velocity context for intelligent adjustments
+            if current_data:
+                current_dates = [parse_date(exp['date']) for exp in current_data]
+                earliest_expense = min(current_dates)
+                latest_expense = max(current_dates)
+                
+                # Calculate how far into the month we are based on expense dates
+                days_into_month = latest_expense.day
+                total_days_in_month = (latest_expense.replace(day=1) + timedelta(days=32)).replace(day=1) - timedelta(days=1)
+                total_days_in_month = total_days_in_month.day
+                month_progress = days_into_month / total_days_in_month
+                
+                # Calculate current spending rate (daily average so far this month)
+                days_with_expenses = len(set(d.day for d in current_dates))
+                current_daily_rate = current_total / max(days_with_expenses, 1)
+                
+                print(f"{category}: Month progress: {month_progress:.1%}, Daily rate: ${current_daily_rate:.2f}, Days active: {days_with_expenses}", file=sys.stderr)
+                
+                # AI velocity intelligence: Adjust based on spending pace context
+                if month_progress < 0.2:  # Early month (first 20%)
+                    if current_daily_rate > 30:  # High spending rate early
+                        velocity_factor = 1.3  # AI expects continued high spending
+                        print(f"{category}: Early month + high velocity = aggressive AI prediction", file=sys.stderr)
+                    else:
+                        velocity_factor = 1.1  # Moderate increase
+                        print(f"{category}: Early month + normal velocity = moderate AI increase", file=sys.stderr)
+                        
+                elif month_progress < 0.6:  # Mid month (20-60%)
+                    if current_daily_rate > 20:  # Decent spending rate
+                        velocity_factor = 1.0  # Trust AI prediction as-is
+                        print(f"{category}: Mid month + good velocity = trust AI prediction", file=sys.stderr)
+                    else:
+                        velocity_factor = 0.9  # Slightly conservative
+                        print(f"{category}: Mid month + low velocity = slightly reduce AI prediction", file=sys.stderr)
+                        
+                else:  # Late month (60%+)
+                    if current_daily_rate > 15:  # Still spending late in month
+                        velocity_factor = 0.8  # More conservative
+                        print(f"{category}: Late month + continued spending = conservative AI", file=sys.stderr)
+                    else:
+                        velocity_factor = 0.6  # Very conservative
+                        print(f"{category}: Late month + low velocity = very conservative AI", file=sys.stderr)
+                
+                # Apply velocity intelligence to AI prediction
+                predicted_additional = predicted_additional * velocity_factor
+                predicted_total = current_total + predicted_additional
+                
+                print(f"{category}: Applied velocity factor {velocity_factor:.2f} to AI prediction", file=sys.stderr)
+            else:
+                print(f"{category}: No current data for velocity analysis", file=sys.stderr)
             
-            print(f"{category}: Prophet AI predicts {predicted_total:.2f} (additional: {predicted_additional:.2f})", file=sys.stderr)
+            # Only apply dynamic daily-based caps (not fixed multipliers)
+            # Calculate realistic daily-based maximum based on remaining days
+            if current_data:
+                current_dates = [parse_date(exp['date']) for exp in current_data]
+                days_with_expenses = len(set(d.day for d in current_dates))
+                current_daily_avg = current_total / max(days_with_expenses, 1)
+                
+                # Dynamic cap: current total + (daily average × remaining days)
+                # This means you could theoretically spend your daily average every remaining day
+                max_additional_per_day = current_daily_avg
+                
+                # Category-specific daily spending limits
+                if category.lower() in ['bills']:
+                    max_additional_per_day = current_daily_avg * 0.3  # Bills don't repeat daily
+                elif category.lower() in ['education']:
+                    max_additional_per_day = current_daily_avg * 0.2  # Education is irregular
+                elif category.lower() in ['food', 'transport']:
+                    max_additional_per_day = current_daily_avg * 1.5  # Daily essentials can vary
+                elif category.lower() in ['shopping', 'entertainment']:
+                    max_additional_per_day = current_daily_avg * 1.0  # Normal spending rate
+                else:
+                    max_additional_per_day = current_daily_avg * 0.8  # Conservative for others
+                
+                # Calculate dynamic maximum based on remaining days
+                max_reasonable_additional = max_additional_per_day * remaining_days
+                max_reasonable_total = current_total + max_reasonable_additional
+                
+                print(f"{category}: Daily avg: ${current_daily_avg:.2f}, Max per day: ${max_additional_per_day:.2f}, Remaining days: {remaining_days}", file=sys.stderr)
+                print(f"{category}: Dynamic cap: ${current_total:.2f} + (${max_additional_per_day:.2f} × {remaining_days} days) = ${max_reasonable_total:.2f}", file=sys.stderr)
+            else:
+                # Fallback if no current data
+                max_reasonable_total = current_total * 2
+                print(f"{category}: No current data for dynamic cap, using 2x current total", file=sys.stderr)
+            
+            if predicted_total > max_reasonable_total:
+                print(f"{category}: AI prediction {predicted_total:.2f} exceeds reasonable limit {max_reasonable_total:.2f}, capping", file=sys.stderr)
+                predicted_total = max_reasonable_total
+            elif predicted_total < current_total:
+                # AI predicts less than current - this can happen, but ensure we don't go below current
+                print(f"{category}: AI predicts decrease, using current total as minimum", file=sys.stderr)
+                predicted_total = current_total
+            else:
+                print(f"{category}: Using pure Prophet AI prediction", file=sys.stderr)
+            
+            print(f"{category}: Prophet AI predicts {predicted_total:.2f} (additional: {predicted_total - current_total:.2f})", file=sys.stderr)
             return predicted_total
             
         except Exception as e:
-            print(f"{category}: Prophet AI failed ({str(e)}), using fallback", file=sys.stderr)
+            print(f"{category}: ❌ Prophet AI failed: {str(e)}", file=sys.stderr)
+            print(f"{category}: 🔄 Falling back to mathematical projection", file=sys.stderr)
     
     # Fallback: Smart mathematical projection
-    print(f"{category}: Using smart math projection (need 10+ points for Prophet AI)", file=sys.stderr)
+    print(f"{category}: 📊 Using smart math projection (Prophet AI requires 3+ points with temporal diversity)", file=sys.stderr)
     
     unique_dates = set(parse_date(expense['date']).day for expense in current_data)
     days_with_spending = len(unique_dates)
@@ -218,19 +245,34 @@ def predict_category(current_data, all_historical_data, category, remaining_days
     spending_frequency = days_with_spending / days_passed
     daily_avg = current_total / max(days_with_spending, 1)
     
-    # Category-specific projections
+    # Category-specific projections with better logic
     if category.lower() in ['bills']:
         predicted_additional = current_total * 0.2  # Minimal additional bills
     elif category.lower() in ['education']:
         predicted_additional = current_total * 0.3  # Some additional education costs
+    elif category.lower() in ['food']:
+        # Food is daily - more sophisticated calculation
+        if days_with_spending >= 2:
+            expected_spending_days = remaining_days * spending_frequency * 0.9
+            predicted_additional = daily_avg * expected_spending_days
+        else:
+            # If only 1 day of food spending, be conservative
+            predicted_additional = current_total * 0.8
     else:
         expected_spending_days = remaining_days * spending_frequency * 0.8  # Slightly conservative
         predicted_additional = daily_avg * expected_spending_days
+    
+    print(f"{category}: 📈 Math projection: Current ${current_total:.2f} + Additional ${predicted_additional:.2f} = ${current_total + predicted_additional:.2f}", file=sys.stderr)
     
     return current_total + predicted_additional
 
 def main():
     try:
+        # Debug environment information
+        print(f"🔍 Python version: {sys.version}", file=sys.stderr)
+        print(f"🔍 Current working directory: {os.getcwd()}", file=sys.stderr)
+        print(f"🔍 Available files: {os.listdir('.')}", file=sys.stderr)
+        
         # Read current month data
         input_data = json.loads(sys.stdin.read())
         print(f"Received {len(input_data)} current expense records", file=sys.stderr)
@@ -247,12 +289,22 @@ def main():
                 categories[category] = []
             categories[category].append(record)
         
-        # Calculate remaining days in month
-        today = datetime.now()
-        last_day_of_month = (today.replace(day=1) + timedelta(days=32)).replace(day=1) - timedelta(days=1)
-        remaining_days = (last_day_of_month - today).days
+        # Calculate remaining days in month based on the latest expense date (context-aware)
+        if input_data:
+            # Find the latest expense date to use as our "current" reference point
+            latest_expense_date = max(parse_date(record['date']) for record in input_data)
+            reference_date = latest_expense_date
+            print(f"Using latest expense date as reference: {reference_date.strftime('%Y-%m-%d')}", file=sys.stderr)
+        else:
+            # Fallback to actual current date if no expense data
+            reference_date = datetime.now()
+            print(f"Using actual current date as reference: {reference_date.strftime('%Y-%m-%d')}", file=sys.stderr)
         
-        print(f"Days remaining in {today.strftime('%B')}: {remaining_days}", file=sys.stderr)
+        # Calculate remaining days from reference date to end of month
+        last_day_of_month = (reference_date.replace(day=1) + timedelta(days=32)).replace(day=1) - timedelta(days=1)
+        remaining_days = (last_day_of_month - reference_date).days
+        
+        print(f"Days remaining in {reference_date.strftime('%B')} from reference date: {remaining_days}", file=sys.stderr)
         
         # Generate AI predictions for each category
         predictions = {}
@@ -261,10 +313,17 @@ def main():
         
         for category, current_expenses in categories.items():
             # Get all historical data for this category (current + training)
-            category_historical = current_expenses + [
+            category_training_data = [
                 record for record in training_data 
                 if record['category'] == category
             ]
+            
+            print(f"🔍 {category} training data: {len(category_training_data)} records", file=sys.stderr)
+            print(f"🔍 {category} current data: {len(current_expenses)} records", file=sys.stderr)
+            
+            category_historical = current_expenses + category_training_data
+            
+            print(f"🔍 {category} total historical: {len(category_historical)} records", file=sys.stderr)
             
             # Track what method is used for metrics
             data_point_count = len(category_historical)
@@ -280,7 +339,8 @@ def main():
                 current_expenses, 
                 category_historical, 
                 category, 
-                remaining_days
+                remaining_days,
+                reference_date
             )
             predictions[category] = round(predicted_total, 2)
         
