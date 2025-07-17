@@ -1,0 +1,12 @@
+# Python dependencies for CloudExpense AI prediction system
+pandas==2.1.4
+numpy==1.24.3
+prophet==1.1.4
+pystan==3.3.0
+
+# Additional dependencies that Prophet needs
+cmdstanpy==1.2.0
+holidays==0.34
+convertdate==2.4.0
+python-dateutil==2.8.2
+setuptools-git==1.2

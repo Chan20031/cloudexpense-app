@@ -1,56 +1,7 @@
 // Set timezone for the Node.js application (important for Elastic Beanstalk)
 process.env.TZ = 'Asia/Kuala_Lumpur';
 
-// IMPORTANT: Ensure Python dependencies are available before starting server
-async function ensurePythonDependencies() {
-    const isAppRunner = process.env.AWS_REGION && process.env.PORT;
-    if (!isAppRunner) {
-        console.log('🏠 Local environment - skipping Python dependency check');
-        return;
-    }
-    
-    console.log('🔧 CloudExpense: Checking Python dependencies...');
-    
-    try {
-        const { execSync } = require('child_process');
-        // Quick check if packages are already installed
-        execSync('python3 -c "import pandas, prophet; print(\\"✅ Python packages ready\\")"', 
-                { encoding: 'utf8', timeout: 5000 });
-        console.log('✅ Python dependencies already available');
-    } catch (error) {
-        console.log('📦 Python packages not found, installing...');
-        console.log('⏰ This may take 5-10 minutes on first deployment...');
-        
-        try {
-            // Install system packages
-            execSync('yum update -y && yum install -y python3 python3-pip python3-devel gcc gcc-c++ make', 
-                    { stdio: 'inherit', timeout: 120000 });
-            
-            // Install Python packages
-            execSync('python3 -m pip install --upgrade pip', { stdio: 'inherit', timeout: 30000 });
-            execSync('python3 -m pip install --no-cache-dir numpy==1.24.3', { stdio: 'inherit', timeout: 180000 });
-            execSync('python3 -m pip install --no-cache-dir pandas==2.0.3', { stdio: 'inherit', timeout: 180000 });
-            execSync('python3 -m pip install --no-cache-dir pystan==3.7.0', { stdio: 'inherit', timeout: 300000 });
-            execSync('python3 -m pip install --no-cache-dir prophet==1.1.4', { stdio: 'inherit', timeout: 300000 });
-            
-            console.log('🎉 Python dependencies installed successfully!');
-        } catch (installError) {
-            console.log('⚠️  Python installation failed, will use mathematical fallback:', installError.message);
-        }
-    }
-}
-
-// Run Python dependency check before starting the server
-ensurePythonDependencies().then(() => {
-    console.log('🚀 Starting CloudExpense server...');
-    startServer();
-}).catch((error) => {
-    console.log('⚠️  Dependency check failed, starting server anyway:', error.message);
-    startServer();
-});
-
-function startServer() {
-    require('dotenv').config();
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
@@ -818,5 +769,3 @@ app.get('/api/debug/test-email-get', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
-
-} // End of startServer function

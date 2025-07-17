@@ -64,15 +64,19 @@ async function installPythonPackages() {
     
     console.log('🐍 Checking Python packages...');
     
-    // Upgrade pip first
+    // Upgrade pip first with longer timeout
     try {
-        execSync('python3 -m pip install --upgrade pip', { stdio: 'inherit', timeout: 30000 });
-        console.log('✅ Pip upgraded');
+        console.log('📦 Upgrading pip...');
+        execSync('python3 -m pip install --upgrade pip', { stdio: 'inherit', timeout: 60000 });
+        console.log('✅ Pip upgraded successfully');
     } catch (error) {
-        console.log('⚠️  Pip upgrade failed, continuing...');
+        console.log('⚠️  Pip upgrade failed, continuing with existing version...');
     }
     
+    let allInstalled = true;
+    
     for (const pkg of packages) {
+        console.log(`\n🔍 Checking ${pkg.name}...`);
         const isInstalled = await checkPackage(pkg.import);
         
         if (isInstalled) {
@@ -81,29 +85,48 @@ async function installPythonPackages() {
         }
         
         console.log(`📥 Installing ${pkg.name}==${pkg.version}...`);
+        
+        // First attempt with specific version
         try {
             execSync(`python3 -m pip install --no-cache-dir ${pkg.name}==${pkg.version}`, 
-                    { stdio: 'inherit', timeout: 180000 });
+                    { stdio: 'inherit', timeout: 300000 }); // 5 minutes timeout
             console.log(`✅ ${pkg.name} installed successfully`);
-        } catch (error) {
-            console.log(`❌ Failed to install ${pkg.name}:`, error.message);
             
-            // Try without version for critical packages
+            // Verify it was actually installed
+            const verifyInstalled = await checkPackage(pkg.import);
+            if (!verifyInstalled) {
+                throw new Error(`Package ${pkg.name} installed but cannot be imported`);
+            }
+            
+        } catch (error) {
+            console.log(`❌ Failed to install ${pkg.name}==${pkg.version}: ${error.message}`);
+            
+            // Retry without version for critical packages
             if (pkg.name === 'pandas' || pkg.name === 'numpy') {
                 try {
-                    console.log(`🔄 Retrying ${pkg.name} without version...`);
+                    console.log(`🔄 Retrying ${pkg.name} without version constraint...`);
                     execSync(`python3 -m pip install --no-cache-dir ${pkg.name}`, 
-                            { stdio: 'inherit', timeout: 180000 });
-                    console.log(`✅ ${pkg.name} installed (latest version)`);
+                            { stdio: 'inherit', timeout: 300000 });
+                    
+                    // Verify retry worked
+                    const retryVerify = await checkPackage(pkg.import);
+                    if (retryVerify) {
+                        console.log(`✅ ${pkg.name} installed successfully (latest version)`);
+                    } else {
+                        throw new Error(`${pkg.name} retry installation failed verification`);
+                    }
+                    
                 } catch (retryError) {
-                    console.log(`❌ ${pkg.name} installation failed completely`);
-                    return false;
+                    console.log(`❌ ${pkg.name} installation failed completely: ${retryError.message}`);
+                    allInstalled = false;
                 }
+            } else {
+                console.log(`⚠️  Skipping ${pkg.name} (not critical for basic functionality)`);
             }
         }
     }
     
-    return true;
+    return allInstalled;
 }
 
 async function verifyInstallation() {
@@ -162,32 +185,56 @@ async function startMainApplication() {
 
 async function main() {
     try {
+        console.log('🔧 Phase 1: Quick Python Check');
+        
+        // Quick check - if Python packages already work, skip installation entirely
+        const quickCheck = await verifyInstallation();
+        if (quickCheck) {
+            console.log('🎉 Python packages already installed and working!');
+            console.log('⚡ Skipping installation, starting server immediately...');
+            await startMainApplication();
+            return;
+        }
+        
+        console.log('📦 Python packages not found, starting installation...');
+        
+        console.log('🔧 Phase 2: System Setup');
         // Step 1: Check Python
         const hasPython = await checkPython();
         if (!hasPython && isAppRunner) {
-            await installSystemPackages();
+            console.log('📦 Installing Python and system dependencies...');
+            const systemOK = await installSystemPackages();
+            if (!systemOK) {
+                console.log('⚠️  System package installation failed, continuing anyway...');
+            }
         }
         
-        // Step 2: Install Python packages
+        console.log('🐍 Phase 3: Python Package Installation (One-time setup)');
+        // Step 2: Install Python packages - BLOCKING until complete
         const packagesOK = await installPythonPackages();
         if (!packagesOK) {
-            console.log('⚠️  Some packages failed to install, but continuing...');
+            console.log('❌ Critical Python packages failed to install!');
+            console.log('🔄 Starting server in fallback mode (no Prophet AI)...');
         }
         
-        // Step 3: Verify installation
+        console.log('🔍 Phase 4: Final Verification');
+        // Step 3: Verify installation - BLOCKING
         const verified = await verifyInstallation();
         if (verified) {
-            console.log('🎉 Prophet AI dependencies ready!');
+            console.log('🎉 Prophet AI dependencies ready! Server will start with full AI capabilities.');
+            console.log('💡 Future restarts will skip this installation step.');
         } else {
-            console.log('⚠️  Verification failed, but starting server anyway...');
+            console.log('⚠️  Python packages not fully verified, but starting server anyway...');
+            console.log('📊 Prophet AI will fallback to mathematical predictions if needed.');
         }
         
-        // Step 4: Start main application
+        console.log('🚀 Phase 5: Starting Main Application');
+        // Step 4: Start main application ONLY after Python setup is complete
         await startMainApplication();
         
     } catch (error) {
         console.error('💥 Runtime installer failed:', error);
-        console.log('🔄 Starting server without Prophet AI...');
+        console.log('🔄 Starting server in emergency fallback mode...');
         await startMainApplication();
     }
 }
