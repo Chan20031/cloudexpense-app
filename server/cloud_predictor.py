@@ -1,5 +1,6 @@
 import sys
 import json
+import os
 import pandas as pd
 from prophet import Prophet
 import warnings
@@ -11,10 +12,13 @@ def load_training_data():
     try:
         with open('training_data.json', 'r') as f:
             data = json.load(f)
-            print(f"Loaded {len(data)} training records for AI", file=sys.stderr)
+            print(f"✅ Loaded {len(data)} training records for AI", file=sys.stderr)
             return data
-    except:
-        print("No training data found - using current data only", file=sys.stderr)
+    except FileNotFoundError:
+        print("⚠️ training_data.json not found - using current data only", file=sys.stderr)
+        return []
+    except Exception as e:
+        print(f"⚠️ Error loading training data: {e} - using current data only", file=sys.stderr)
         return []
 
 def parse_date(date_str):
@@ -219,6 +223,11 @@ def predict_category(current_data, all_historical_data, category, remaining_days
 
 def main():
     try:
+        # Debug environment information
+        print(f"🔍 Python version: {sys.version}", file=sys.stderr)
+        print(f"🔍 Current working directory: {os.getcwd()}", file=sys.stderr)
+        print(f"🔍 Available files: {os.listdir('.')}", file=sys.stderr)
+        
         # Read current month data
         input_data = json.loads(sys.stdin.read())
         print(f"Received {len(input_data)} current expense records", file=sys.stderr)

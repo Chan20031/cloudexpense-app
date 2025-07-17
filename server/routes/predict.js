@@ -87,6 +87,7 @@ router.post('/', async (req, res) => {
     
     console.log(`Using Python command: ${pythonCommand}`);
     console.log(`Python script path: ${pythonScript}`);
+    console.log(`Platform: ${process.platform}`);
     
     const pythonProcess = spawn(pythonCommand, [pythonScript]);
     
@@ -100,12 +101,15 @@ router.post('/', async (req, res) => {
     
     pythonProcess.stderr.on('data', (data) => {
       errorOutput += data.toString();
-      console.log('Python stderr output:', data.toString()); // Log all stderr output
+      console.log('=== PYTHON STDERR ===:', data.toString()); // Enhanced logging
     });
 
     pythonProcess.on('close', (code) => {
-      console.log('Python process finished with code:', code);
-      console.log('Full Python stderr output:', errorOutput);
+      console.log('=== PYTHON PROCESS RESULT ===');
+      console.log('Exit code:', code);
+      console.log('Full stderr:', errorOutput);
+      console.log('Full stdout:', output);
+      console.log('================================');
       
       if (code !== 0) {
         console.error('Python predictor error:', errorOutput);
