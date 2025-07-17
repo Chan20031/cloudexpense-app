@@ -251,13 +251,38 @@ def predict_category(current_data, all_historical_data, category, remaining_days
     elif category.lower() in ['education']:
         predicted_additional = current_total * 0.3  # Some additional education costs
     elif category.lower() in ['food']:
-        # Food is daily - more sophisticated calculation
+        # 🍽️ REALISTIC MEAL ESTIMATION - At least 2 meals per day
         if days_with_spending >= 2:
-            expected_spending_days = remaining_days * spending_frequency * 0.9
-            predicted_additional = daily_avg * expected_spending_days
+            # Calculate average meal cost (assuming 2 meals per day minimum)
+            total_meals_so_far = days_with_spending * 2
+            avg_meal_cost = current_total / total_meals_so_far
+            
+            # Estimate remaining meals (2 per day minimum)
+            remaining_meals = remaining_days * 2
+            
+            # Apply spending frequency (some days might skip meals or eat at home)
+            realistic_meal_frequency = min(spending_frequency * 1.2, 1.0)  # Cap at 100%
+            expected_paid_meals = remaining_meals * realistic_meal_frequency
+            
+            predicted_additional = avg_meal_cost * expected_paid_meals
+            
+            print(f"{category}: Avg meal cost: ${avg_meal_cost:.2f}, Expected meals: {expected_paid_meals:.1f}", file=sys.stderr)
         else:
-            # If only 1 day of food spending, be conservative
-            predicted_additional = current_total * 0.8
+            # If only 1 day of food spending, estimate based on realistic meal needs
+            avg_meal_cost = current_total / 2  # Assume 2 meals on that day
+            remaining_meals = remaining_days * 2
+            
+            # Be slightly conservative but realistic
+            predicted_additional = avg_meal_cost * remaining_meals * 0.8
+            
+            print(f"{category}: Single day estimate - meal cost: ${avg_meal_cost:.2f}, meals needed: {remaining_meals}", file=sys.stderr)
+        
+        # Ensure minimum daily food budget (RM15/day minimum in Malaysia)
+        min_daily_food = 15
+        min_additional = remaining_days * min_daily_food
+        if predicted_additional < min_additional:
+            predicted_additional = min_additional
+            print(f"{category}: Applied minimum food budget (RM{min_daily_food}/day)", file=sys.stderr)
     else:
         expected_spending_days = remaining_days * spending_frequency * 0.8  # Slightly conservative
         predicted_additional = daily_avg * expected_spending_days
