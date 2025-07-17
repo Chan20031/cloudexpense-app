@@ -87,22 +87,22 @@ export default function CalculatorComponent({ onResult }) {
     { label: '×', type: 'operation', className: 'bg-blue-500 hover:bg-blue-600 text-white' },
     { label: '-', type: 'operation', className: 'bg-blue-500 hover:bg-blue-600 text-white' },
     
-    { label: '7', type: 'number', className: 'bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500' },
-    { label: '8', type: 'number', className: 'bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500' },
-    { label: '9', type: 'number', className: 'bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500' },
+    { label: '7', type: 'number', className: 'bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-800 dark:text-white' },
+    { label: '8', type: 'number', className: 'bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-800 dark:text-white' },
+    { label: '9', type: 'number', className: 'bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-800 dark:text-white' },
     { label: '+', type: 'operation', className: 'bg-blue-500 hover:bg-blue-600 text-white' },
     
-    { label: '4', type: 'number', className: 'bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500' },
-    { label: '5', type: 'number', className: 'bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500' },
-    { label: '6', type: 'number', className: 'bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500' },
+    { label: '4', type: 'number', className: 'bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-800 dark:text-white' },
+    { label: '5', type: 'number', className: 'bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-800 dark:text-white' },
+    { label: '6', type: 'number', className: 'bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-800 dark:text-white' },
     { label: '=', type: 'equals', className: 'bg-green-500 hover:bg-green-600 text-white row-span-2' },
     
-    { label: '1', type: 'number', className: 'bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500' },
-    { label: '2', type: 'number', className: 'bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500' },
-    { label: '3', type: 'number', className: 'bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500' },
+    { label: '1', type: 'number', className: 'bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-800 dark:text-white' },
+    { label: '2', type: 'number', className: 'bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-800 dark:text-white' },
+    { label: '3', type: 'number', className: 'bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-800 dark:text-white' },
     
-    { label: '0', type: 'number', className: 'bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 col-span-2' },
-    { label: '.', type: 'decimal', className: 'bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500' },
+    { label: '0', type: 'number', className: 'bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-800 dark:text-white col-span-2' },
+    { label: '.', type: 'decimal', className: 'bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-800 dark:text-white' },
   ];
 
   const handleButtonClick = (button) => {
@@ -130,9 +130,9 @@ export default function CalculatorComponent({ onResult }) {
   return (
     <div className="calculator w-full max-w-xs mx-auto">
       {/* Display */}
-      <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg mb-4">
+      <div className="bg-white dark:bg-gray-700 p-4 rounded-lg mb-4 border border-gray-300 dark:border-gray-600 shadow-inner">
         <div className="text-right text-2xl font-mono text-gray-900 dark:text-white overflow-hidden">
-          {display}
+          {display || '0'}
         </div>
       </div>
 
@@ -158,7 +158,7 @@ export default function CalculatorComponent({ onResult }) {
       {/* Use Result Button */}
       <button
         onClick={handleUse}
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors duration-200"
+        className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-lg transition-colors duration-200 shadow-md"
       >
         Use Result
       </button>

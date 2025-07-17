@@ -1,9 +1,25 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { X, Plus, Upload, Calculator, Utensils, Car, ShoppingBag, Receipt, GraduationCap, Heart, MoreHorizontal, DollarSign, Gift, Briefcase, TrendingUp, PiggyBank } from 'lucide-react';
+import { X, Plus, Upload, Calculator, Utensils, Car, ShoppingBag, Receipt, GraduationCap, Heart, MoreHorizontal, DollarSign, Gift, Briefcase, TrendingUp, PiggyBank, Calendar } from 'lucide-react';
 import { ExpenseContext } from '../../context/ExpenseContext';
 import { IncomeContext } from '../../context/IncomeContext';
 import { AuthContext } from '../../context/AuthContext';
 import CalculatorComponent from './CalculatorComponent';
+
+// Custom styles for date-time input
+const dateTimeStyles = `
+  input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    background-color: transparent;
+    bottom: 0;
+    cursor: pointer;
+    height: auto;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+    opacity: 0;
+  }
+`;
 
 export default function AddTransactionModal({ isOpen, onClose }) {
   const { addExpense } = useContext(ExpenseContext);
@@ -122,7 +138,8 @@ export default function AddTransactionModal({ isOpen, onClose }) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+      <style>{dateTimeStyles}</style>
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto border border-gray-200 dark:border-gray-700">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
@@ -130,22 +147,22 @@ export default function AddTransactionModal({ isOpen, onClose }) {
           </h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+            className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors bg-gray-100 dark:bg-gray-600"
           >
-            <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+            <X className="w-5 h-5 text-gray-600 dark:text-gray-400" />
           </button>
         </div>
 
         {/* Content */}
         <div className="p-6">
           {/* Transaction Type Toggle */}
-          <div className="flex bg-gray-100 dark:bg-gray-700 rounded-lg p-1 mb-6">
+          <div className="flex bg-gray-100 dark:bg-gray-700 rounded-lg p-1 mb-6 shadow-inner">
             <button
               onClick={() => handleTypeChange('expense')}
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
                 transactionType === 'expense'
-                  ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
-                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
+                  ? 'bg-blue-500 text-white shadow-md'
+                  : 'bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-500'
               }`}
             >
               Expense
@@ -154,8 +171,8 @@ export default function AddTransactionModal({ isOpen, onClose }) {
               onClick={() => handleTypeChange('income')}
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
                 transactionType === 'income'
-                  ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
-                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
+                  ? 'bg-blue-500 text-white shadow-md'
+                  : 'bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-500'
               }`}
             >
               Income
@@ -196,7 +213,7 @@ export default function AddTransactionModal({ isOpen, onClose }) {
                 value={form.item}
                 onChange={(e) => setForm(prev => ({ ...prev, item: e.target.value }))}
                 placeholder={`Enter ${transactionType} description`}
-                className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-800 dark:text-white shadow-sm"
                 required
               />
             </div>
@@ -206,14 +223,22 @@ export default function AddTransactionModal({ isOpen, onClose }) {
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Date & Time
               </label>
-              <input
-                type="datetime-local"
-                value={form.created_at}
-                onChange={e => setForm(prev => ({ ...prev, created_at: e.target.value }))}
-                className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                required
-                max={new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16)}
-              />
+              <div className="relative">
+                <input
+                  type="datetime-local"
+                  value={form.created_at}
+                  onChange={e => setForm(prev => ({ ...prev, created_at: e.target.value }))}
+                  className="w-full p-3 pl-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-800 dark:text-white shadow-sm cursor-pointer"
+                  required
+                  max={new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16)}
+                />
+                <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500 dark:text-blue-400 pointer-events-none">
+                  <Calendar className="h-5 w-5" />
+                </div>
+              </div>
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                Select the date and time of your {transactionType}
+              </p>
             </div>
 
             {/* Category */}
@@ -224,7 +249,7 @@ export default function AddTransactionModal({ isOpen, onClose }) {
               <select
                 value={form.category}
                 onChange={(e) => setForm(prev => ({ ...prev, category: e.target.value }))}
-                className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-800 dark:text-white shadow-sm"
               >
                 {(transactionType === 'expense' ? expenseCategories : incomeCategories).map(cat => {
                   const IconComponent = cat.icon;
@@ -268,13 +293,13 @@ export default function AddTransactionModal({ isOpen, onClose }) {
                   value={form.amount}
                   onChange={(e) => setForm(prev => ({ ...prev, amount: e.target.value }))}
                   placeholder="0.00"
-                  className="w-full p-3 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                  className="w-full p-3 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-800 dark:text-white shadow-sm"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowCalculator(true)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-300 bg-blue-50 dark:bg-blue-900/20 rounded-md"
                   title="Open calculator"
                 >
                   <Calculator className="w-5 h-5" />
@@ -395,10 +420,10 @@ export default function AddTransactionModal({ isOpen, onClose }) {
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`w-full py-3 px-4 rounded-lg font-medium transition-colors ${
+              className={`w-full py-3 px-4 rounded-lg font-medium transition-colors shadow-md ${
                 transactionType === 'expense'
-                  ? 'bg-red-500 hover:bg-red-600 text-white'
-                  : 'bg-green-500 hover:bg-green-600 text-white'
+                  ? 'bg-blue-500 hover:bg-blue-600 text-white'
+                  : 'bg-blue-500 hover:bg-blue-600 text-white'
               } ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               {isSubmitting ? 'Adding...' : `Add ${transactionType === 'expense' ? 'Expense' : 'Income'}`}
@@ -410,14 +435,14 @@ export default function AddTransactionModal({ isOpen, onClose }) {
       {/* Calculator Modal */}
       {showCalculator && (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-60">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-sm w-full mx-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-sm w-full mx-4 shadow-xl border border-gray-200 dark:border-gray-700">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Calculator</h3>
               <button
                 onClick={() => setShowCalculator(false)}
                 className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
               >
-                <X className="w-5 h-5 text-gray-500" />
+                <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
               </button>
             </div>
             <CalculatorComponent onResult={handleCalculatorResult} />
