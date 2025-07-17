@@ -766,6 +766,19 @@ app.get('/api/debug/test-email-get', async (req, res) => {
   }
 });
 
+// Initialize AI training data scheduler in production environment
+if (process.env.NODE_ENV === 'production') {
+  try {
+    console.log('Starting AI training data scheduler...');
+    const aiTrainingScheduler = require('./ai-training-scheduler');
+    console.log('AI training data scheduler started successfully');
+  } catch (error) {
+    console.error('Failed to start AI training scheduler:', error.message);
+  }
+}
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`AI prediction: ${process.env.DISABLE_AI ? 'Disabled' : 'Enabled'}`);
 });
