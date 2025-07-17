@@ -10,12 +10,38 @@ warnings.filterwarnings('ignore')
 def load_training_data():
     """Load training data for AI learning"""
     try:
+        print(f"🔍 Attempting to load training_data.json from: {os.getcwd()}", file=sys.stderr)
+        
+        # Check if file exists
+        if not os.path.exists('training_data.json'):
+            print("❌ training_data.json does not exist in current directory", file=sys.stderr)
+            return []
+            
+        print("✅ training_data.json file exists", file=sys.stderr)
+        
+        # Check file size
+        file_size = os.path.getsize('training_data.json')
+        print(f"📊 training_data.json file size: {file_size} bytes", file=sys.stderr)
+        
         with open('training_data.json', 'r') as f:
             data = json.load(f)
-            print(f"✅ Loaded {len(data)} training records for AI", file=sys.stderr)
+            print(f"✅ Successfully loaded {len(data)} training records for AI", file=sys.stderr)
+            
+            # Show sample of data structure
+            if data:
+                sample = data[0]
+                print(f"📋 Sample training record: {sample}", file=sys.stderr)
+                
+                # Check categories in training data
+                categories = set(record.get('category', 'unknown') for record in data)
+                print(f"📂 Categories in training data: {sorted(categories)}", file=sys.stderr)
+            
             return data
     except FileNotFoundError:
         print("⚠️ training_data.json not found - using current data only", file=sys.stderr)
+        return []
+    except json.JSONDecodeError as e:
+        print(f"❌ JSON decode error in training_data.json: {e}", file=sys.stderr)
         return []
     except Exception as e:
         print(f"⚠️ Error loading training data: {e} - using current data only", file=sys.stderr)
@@ -42,7 +68,15 @@ def predict_category(current_data, all_historical_data, category, remaining_days
     # Use Prophet AI if we have at least a minimal amount of data
     if len(all_historical_data) >= 3:  # Lowered to 3 to maximize AI usage
         try:
-            print(f"{category}: Using Prophet AI with {len(all_historical_data)} data points", file=sys.stderr)
+            print(f"{category}: ⚡ Attempting Prophet AI with {len(all_historical_data)} data points", file=sys.stderr)
+            
+            # Check if we have sufficient temporal diversity for Prophet
+            unique_dates = set(parse_date(record['date']).date() for record in all_historical_data)
+            if len(unique_dates) < 2:
+                print(f"{category}: ❌ Only {len(unique_dates)} unique dates - Prophet needs temporal diversity, using fallback", file=sys.stderr)
+                raise ValueError("Insufficient temporal diversity for Prophet AI")
+            
+            print(f"{category}: ✅ Using Prophet AI with {len(all_historical_data)} data points across {len(unique_dates)} dates", file=sys.stderr)
             
             # Prepare data for Prophet
             prophet_data = []
@@ -199,10 +233,11 @@ def predict_category(current_data, all_historical_data, category, remaining_days
             return predicted_total
             
         except Exception as e:
-            print(f"{category}: Prophet AI failed ({str(e)}), using fallback", file=sys.stderr)
+            print(f"{category}: ❌ Prophet AI failed: {str(e)}", file=sys.stderr)
+            print(f"{category}: 🔄 Falling back to mathematical projection", file=sys.stderr)
     
     # Fallback: Smart mathematical projection
-    print(f"{category}: Using smart math projection (need 3+ points for Prophet AI)", file=sys.stderr)
+    print(f"{category}: 📊 Using smart math projection (Prophet AI requires 3+ points with temporal diversity)", file=sys.stderr)
     
     unique_dates = set(parse_date(expense['date']).day for expense in current_data)
     days_with_spending = len(unique_dates)
@@ -210,14 +245,24 @@ def predict_category(current_data, all_historical_data, category, remaining_days
     spending_frequency = days_with_spending / days_passed
     daily_avg = current_total / max(days_with_spending, 1)
     
-    # Category-specific projections
+    # Category-specific projections with better logic
     if category.lower() in ['bills']:
         predicted_additional = current_total * 0.2  # Minimal additional bills
     elif category.lower() in ['education']:
         predicted_additional = current_total * 0.3  # Some additional education costs
+    elif category.lower() in ['food']:
+        # Food is daily - more sophisticated calculation
+        if days_with_spending >= 2:
+            expected_spending_days = remaining_days * spending_frequency * 0.9
+            predicted_additional = daily_avg * expected_spending_days
+        else:
+            # If only 1 day of food spending, be conservative
+            predicted_additional = current_total * 0.8
     else:
         expected_spending_days = remaining_days * spending_frequency * 0.8  # Slightly conservative
         predicted_additional = daily_avg * expected_spending_days
+    
+    print(f"{category}: 📈 Math projection: Current ${current_total:.2f} + Additional ${predicted_additional:.2f} = ${current_total + predicted_additional:.2f}", file=sys.stderr)
     
     return current_total + predicted_additional
 
@@ -268,10 +313,17 @@ def main():
         
         for category, current_expenses in categories.items():
             # Get all historical data for this category (current + training)
-            category_historical = current_expenses + [
+            category_training_data = [
                 record for record in training_data 
                 if record['category'] == category
             ]
+            
+            print(f"🔍 {category} training data: {len(category_training_data)} records", file=sys.stderr)
+            print(f"🔍 {category} current data: {len(current_expenses)} records", file=sys.stderr)
+            
+            category_historical = current_expenses + category_training_data
+            
+            print(f"🔍 {category} total historical: {len(category_historical)} records", file=sys.stderr)
             
             # Track what method is used for metrics
             data_point_count = len(category_historical)
